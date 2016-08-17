@@ -1,0 +1,7 @@
+name: civ-dungeons
+version: @version@-@apiversion@
+description: Adds functionality for creating dungeons where blocks placed will disapear after time.
+authors: [Amelorate]
+website: https://github.com/Ameliorate/CivDungeons
+
+main: org.civdungeons.Main
