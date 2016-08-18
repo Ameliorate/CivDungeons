@@ -4,4 +4,4 @@ description: Adds functionality for creating dungeons where blocks placed will d
 authors: [Amelorate]
 website: https://github.com/Ameliorate/CivDungeons
 
-main: org.civdungeons.Main
+main: org.ame.civdungeons.Main
