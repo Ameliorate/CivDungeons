@@ -35,6 +35,9 @@ idea {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/groups/public/"
+    }
 }
 
 group = project.property("group")
@@ -44,6 +47,8 @@ sourceCompatibility = project.property("sourceversion")
 dependencies {
     compile group: 'org.spigotmc', name: 'spigot-api', version: project.property("apiversion")
     compile group: 'org.spigotmc', name: 'spigot', version: project.property("apiversion")
+
+    compile files('lib/worldedit-bukkit-6.1.3.jar')
 
     // dependencies go here
     // Example:
