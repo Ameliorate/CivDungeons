@@ -30,6 +30,10 @@ public abstract class Dungeon {
         worldCreator.generator(new VoidGenerator());
         dungeonWorld = mainPlugin.getServer().createWorld(worldCreator);
 
+        if (spawnLocation.getWorld() == null) {
+            spawnLocation.setWorld(dungeonWorld);
+        }
+
         mainPlugin.getServer().getPluginManager().registerEvents(new DungeonWorldBorder(this), mainPlugin);
     }
 
@@ -69,7 +73,7 @@ public abstract class Dungeon {
         try {
             paste.paste(session, new Vector(0, 0, 0), true);
         } catch (MaxChangedBlocksException e) {
-            throw new AssertionError("MaxChangedBlocks is supposed to be infinity");
+            throw new AssertionError("MaxChangedBlocks is supposed to be infinity", e);
         }
     }
 }

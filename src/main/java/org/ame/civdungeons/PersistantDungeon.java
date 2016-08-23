@@ -14,11 +14,11 @@ import java.io.IOException;
 public class PersistantDungeon extends Dungeon {
     public PersistantDungeon(Location spawnLocation, String name, File schematic, Main mainPlugin) throws IOException, DataException {
         super(spawnLocation, name,
-                SchematicFormat.getFormat(schematic).load(schematic).getLength(),   // Blame java, you can't even
-                SchematicFormat.getFormat(schematic).load(schematic).getHeight(),   // have variables before calling
-                SchematicFormat.getFormat(schematic).load(schematic).getWidth(),    // super.
+                SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
+                SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
+                SchematicFormat.getFormat(schematic).load(schematic).getLength(),  // super.
                 mainPlugin);
-        if (dungeonWorld.getBlockAt(-50, 50, -50) == null) {
+        if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
             buildDungeon(schematic);
             new Location(dungeonWorld, -50, 50, -50).getBlock().setType(Material.BEDROCK);
         }

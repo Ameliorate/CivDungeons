@@ -1,5 +1,6 @@
 package org.ame.civdungeons;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,10 +29,14 @@ public class DungeonWorldBorder implements Listener {
                 playerLocation.getZ() < 0) {
             // Since dungeons are always only on positive coords, I can just check for less than 0.
             dungeon.teleportPlayerToSpawn(event.getPlayer());
-        } else if (playerLocation.getX() < dungeon.getMaxX() ||
-                playerLocation.getY() < dungeon.getMaxY() ||
-                playerLocation.getZ() < dungeon.getMaxZ()) {
+            event.getPlayer().sendMessage(ChatColor.RED + "You've reached the edge of this dungeon! " +
+                    "Please report how you did this to the server admins.");
+        } else if (playerLocation.getX() > dungeon.getMaxX() ||
+                playerLocation.getY() > dungeon.getMaxY() - 1 ||
+                playerLocation.getZ() > dungeon.getMaxZ()) {
             dungeon.teleportPlayerToSpawn(event.getPlayer());
+            event.getPlayer().sendMessage(ChatColor.RED + "You've reached the edge of this dungeon! " +
+                    "Please report how you did this to the server admins.");
         }
     }
 }
