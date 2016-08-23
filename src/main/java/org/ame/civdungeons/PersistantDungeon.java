@@ -12,8 +12,10 @@ import java.io.IOException;
  * A kind of dungeon where blocks placed inside never reset.
  */
 public class PersistantDungeon extends Dungeon {
-    public PersistantDungeon(Location spawnLocation, String name, File schematic, Main mainPlugin) throws IOException, DataException {
-        super(spawnLocation, name,
+    @SuppressWarnings("deprecation")
+    public PersistantDungeon(Location spawnLocation, Location exitLocation,
+                             String name, File schematic, Main mainPlugin) throws IOException, DataException {
+        super(spawnLocation, exitLocation, name,
                 SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
                 SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
                 SchematicFormat.getFormat(schematic).load(schematic).getLength(),  // super.

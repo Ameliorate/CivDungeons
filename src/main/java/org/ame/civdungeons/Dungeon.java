@@ -19,8 +19,9 @@ public abstract class Dungeon {
     /**
      * Creates a new dungeon, loading it from disc.
      */
-    public Dungeon(Location spawnLocation, String name, int maxX, int maxY, int maxZ, Main mainPlugin) {
+    public Dungeon(Location spawnLocation, Location exitLocation, String name, int maxX, int maxY, int maxZ, Main mainPlugin) {
         this.spawnLocation = spawnLocation;
+        this.exitLocation = exitLocation;
         this.mainPlugin = mainPlugin;
         this.maxX = maxX;
         this.maxY = maxY;
@@ -41,6 +42,7 @@ public abstract class Dungeon {
     private Main mainPlugin;
 
     private Location spawnLocation;
+    private Location exitLocation;
     private int maxX;
     private int maxY;
     private int maxZ;
@@ -59,6 +61,10 @@ public abstract class Dungeon {
 
     public void teleportPlayerToSpawn(Player player) {
         player.teleport(spawnLocation);
+    }
+
+    public void teleportPlayerToExit(Player player) {
+        player.teleport(exitLocation);
     }
 
     /**
