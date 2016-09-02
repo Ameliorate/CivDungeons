@@ -21,7 +21,7 @@ public class PersistentDungeon extends Dungeon {
                 SchematicFormat.getFormat(schematic).load(schematic).getLength(),  // super.
                 mainPlugin);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
-            buildDungeon(schematic);
+            buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));
             new Location(dungeonWorld, -50, 50, -50).getBlock().setType(Material.BEDROCK);
         }
     }

@@ -32,7 +32,7 @@ public class Main extends JavaPlugin {
 
         Configuration config = getConfig();
 
-        config.addDefault("dungeons.testdungeon.type", "PersistentDungeon");
+        config.addDefault("dungeons.testdungeon.type", "DecayDungeon");
         config.addDefault("dungeons.testdungeon.schematic", "test");
 
         config.addDefault("dungeons.testdungeon.spawnX", 2);
@@ -44,6 +44,9 @@ public class Main extends JavaPlugin {
         config.addDefault("dungeons.testdungeon.exitZ", 0);
         config.addDefault("dungeons.testdungeon.exitWorld", "world");
 
+        config.addDefault("dungeons.testdungeon.breakTimeVarianceSeconds", 10);
+        config.addDefault("dungeons.testdungeon.breakAvgTimeSeconds", 10);
+
         config.options().copyDefaults(true);
         saveConfig();
 
@@ -51,8 +54,8 @@ public class Main extends JavaPlugin {
 
         for (String dungeon : dungeons.getKeys(false)) {
             String type = dungeons.getString(dungeon + ".type");
-            if (!type.equals("PersistentDungeon")) {
-                throw new ConfigurationException("config.dungeons.testdungeon.type must be PersistentDungeon");
+            if (!(type.equals("PersistentDungeon") || type.equals("DecayDungeon"))) {
+                throw new ConfigurationException("config.dungeons.testdungeon.type must be PersistentDungeon or DecayDungeon");
             }
 
             float spawnX = (float) dungeons.getDouble(dungeon + ".spawnX");
@@ -71,8 +74,16 @@ public class Main extends JavaPlugin {
                     File.separator + schematic + ".schematic");
 
             try {
-                this.dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
-                        schematicFile, this));
+                if (type.equals("PersistentDungeon")) {
+                    this.dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
+                            schematicFile, this));
+                } else if (type.equals("DecayDungeon")) {
+                    int variance = dungeons.getInt(dungeon + ".breakTimeVarianceSeconds");
+                    int avgTime = dungeons.getInt(dungeon + ".breakAvgTimeSeconds");
+
+                    this.dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon, schematicFile, this,
+                            variance * 20, avgTime * 20));
+                }
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             } catch (@SuppressWarnings("deprecation") DataException e) {

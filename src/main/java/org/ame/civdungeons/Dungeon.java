@@ -72,13 +72,13 @@ public abstract class Dungeon {
      * Builds the dungeon from a schematic, deleting the old dungeon if needed.
      */
     @SuppressWarnings("deprecation")
-    protected void buildDungeon(File schematic) throws IOException, DataException {
+    protected void buildDungeon(File schematic, Location location) throws IOException, DataException {
         SchematicFormat schematicFormat = SchematicFormat.getFormat(schematic);
         CuboidClipboard paste = schematicFormat.load(schematic);
 
         EditSession session = new EditSession(BukkitUtil.getLocalWorld(dungeonWorld), -1);
         try {
-            paste.paste(session, new Vector(0, 0, 0), false);
+            paste.paste(session, new Vector(location.getX(), location.getY(), location.getZ()), false);
         } catch (MaxChangedBlocksException e) {
             throw new AssertionError("MaxChangedBlocks is supposed to be infinity", e);
         }
