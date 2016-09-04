@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 
 public abstract class Dungeon {
     /**
@@ -82,6 +81,5 @@ public abstract class Dungeon {
         } catch (MaxChangedBlocksException e) {
             throw new AssertionError("MaxChangedBlocks is supposed to be infinity", e);
         }
-        mainPlugin.getLogger().log(Level.INFO, "Regenerated dungeon " + dungeonWorld.getName());
     }
 }
