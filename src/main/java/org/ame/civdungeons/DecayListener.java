@@ -1,5 +1,6 @@
 package org.ame.civdungeons;
 
+import org.ame.civdungeons.blockcopy.CopyBlock;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -47,64 +48,17 @@ class DecayListener implements Listener {
 
         int semiDelay = new Random().nextInt(variance) - (variance / 2);
         int delay = semiDelay + avgTime;
-        final BlockState[] dest = {broken.getState()};  // Array to get around lambda issues.
+        final BlockState dest = broken.getState();  // Array to get around lambda issues.
 
         mainPlugin.getServer().getScheduler().runTaskLater(mainPlugin, () -> {
             Block template =
                     new Location(dungeon.dungeonWorld, broken.getX() - blockOffset, broken.getY(), broken.getZ())
                     .getBlock();
 
-            dest[0].setType(template.getType());
-            dest[0].setData(template.getState().getData());
-            dest[0].update(true);
-            dest[0] = dest[0].getBlock().getState();
+            CopyBlock.copyBlock(template, dest);
+            dest.getWorld().playEffect(dest.getLocation(), Effect.STEP_SOUND, dest.getType(), 10);
 
-            if (template.getState() instanceof Chest) {
-                Chest destChest = (Chest) dest[0];
-                Chest templateChest = (Chest) template.getState();
-
-                destChest.getBlockInventory().setContents(templateChest.getInventory().getContents());
-            } else if (template.getState() instanceof Furnace) {
-                Furnace destChest = (Furnace) dest[0];
-                Furnace templateChest = (Furnace) template.getState();
-
-                destChest.getInventory().setContents(templateChest.getInventory().getContents());
-            } else if (template.getState() instanceof Dropper) {
-                Dropper destChest = (Dropper) dest[0];
-                Dropper templateChest = (Dropper) template.getState();
-
-                destChest.getInventory().setContents(templateChest.getInventory().getContents());
-            } else if (template.getState() instanceof Hopper) {
-                Hopper destChest = (Hopper) dest[0];
-                Hopper templateChest = (Hopper) template.getState();
-
-                destChest.getInventory().setContents(templateChest.getInventory().getContents());
-            } else if (template.getState() instanceof BrewingStand) {
-                BrewingStand destChest = (BrewingStand) dest[0];
-                BrewingStand templateChest = (BrewingStand) template.getState();
-
-                destChest.getInventory().setContents(templateChest.getInventory().getContents());
-            } else if (template.getState() instanceof Sign) {
-                Sign destChest = (Sign) dest[0];
-                Sign templateChest = (Sign) template.getState();
-
-                int i = 0;
-                for (String line : templateChest.getLines()) {
-                    destChest.setLine(i, line);
-                    i++;
-                }
-            } else if (template.getState() instanceof Banner) {
-                Banner destChest = (Banner) dest[0];
-                Banner templateChest = (Banner) template.getState();
-
-                destChest.setPatterns(templateChest.getPatterns());
-            }
-
-            dest[0].update(true);
-
-            dest[0].getWorld().playEffect(dest[0].getLocation(), Effect.STEP_SOUND, dest[0].getType(), 10);
-
-            blockLock.remove(dest[0].getLocation());
+            blockLock.remove(dest.getLocation());
         }, delay);
     }
 

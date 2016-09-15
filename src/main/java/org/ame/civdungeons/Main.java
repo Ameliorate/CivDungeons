@@ -1,6 +1,10 @@
 package org.ame.civdungeons;
 
 import com.sk89q.worldedit.data.DataException;
+import org.ame.civdungeons.blockcopy.CopyBlock;
+import org.ame.civdungeons.blockcopy.InventoryCopier;
+import org.ame.civdungeons.blockcopy.MetaCopier;
+import org.ame.civdungeons.blockcopy.TypeCopier;
 import org.apache.logging.log4j.core.config.ConfigurationException;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
@@ -51,6 +55,10 @@ public class Main extends JavaPlugin {
         saveConfig();
 
         ConfigurationSection dungeons = config.getConfigurationSection("dungeons");
+
+        CopyBlock.addBlockCopier(new TypeCopier(), 1);
+        CopyBlock.addBlockCopier(new MetaCopier(), 2);
+        CopyBlock.addBlockCopier(new InventoryCopier(), 3);
 
         for (String dungeon : dungeons.getKeys(false)) {
             String type = dungeons.getString(dungeon + ".type");
