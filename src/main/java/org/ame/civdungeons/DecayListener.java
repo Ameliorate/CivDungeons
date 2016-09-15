@@ -11,6 +11,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
@@ -153,5 +154,13 @@ class DecayListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         handleBlockPlace(event.getBlock());
+    }
+
+    @EventHandler
+    public void onBucketPlace(PlayerBucketEmptyEvent event) {
+        Location clicked = event.getBlockClicked().getLocation();
+        BlockFace face = event.getBlockFace();
+        Location block = clicked.add(face.getModX(), face.getModY(), face.getModZ());
+        handleBlockPlace(block.getBlock());
     }
 }
