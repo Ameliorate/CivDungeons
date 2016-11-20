@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -63,52 +64,52 @@ class DecayListener implements Listener {
         }, delay);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onPlayerBlockBreak(BlockBreakEvent event) {
         handleBlockBreak(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onExplosionBlockBreak(BlockExplodeEvent event) {
         event.blockList().forEach(this::handleBlockBreak);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onExplosionBlockBreak(EntityExplodeEvent event) {
         event.blockList().forEach(this::handleBlockBreak);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onBlockBurn(BlockBurnEvent event) {
         handleBlockBreak(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onBlockFade(BlockFadeEvent event) {
         handleBlockBreak(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
         handleBlockBreak(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onLeavesDecay(LeavesDecayEvent event) {
         handleBlockBreak(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onBlockDispense(BlockDispenseEvent event) {
         handleBlockBreak(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onInventoryMoveItem(InventoryMoveItemEvent event) {
         handleBlockBreak(event.getSource().getLocation().getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (event.getInventory() == null) {
             return;
@@ -151,12 +152,12 @@ class DecayListener implements Listener {
         }, delay);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onBlockPlace(BlockPlaceEvent event) {
         handleBlockPlace(event.getBlock());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
     public void onBucketPlace(PlayerBucketEmptyEvent event) {
         Location clicked = event.getBlockClicked().getLocation();
         BlockFace face = event.getBlockFace();
