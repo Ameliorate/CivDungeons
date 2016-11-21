@@ -34,25 +34,8 @@ public class Main extends JavaPlugin {
             }
         }
 
+        saveDefaultConfig();
         Configuration config = getConfig();
-
-        config.addDefault("dungeons.testdungeon.type", "DecayDungeon");
-        config.addDefault("dungeons.testdungeon.schematic", "test");
-
-        config.addDefault("dungeons.testdungeon.spawnX", 2);
-        config.addDefault("dungeons.testdungeon.spawnY", 2);
-        config.addDefault("dungeons.testdungeon.spawnZ", 2);
-
-        config.addDefault("dungeons.testdungeon.exitX", 0);
-        config.addDefault("dungeons.testdungeon.exitY", 128);
-        config.addDefault("dungeons.testdungeon.exitZ", 0);
-        config.addDefault("dungeons.testdungeon.exitWorld", "world");
-
-        config.addDefault("dungeons.testdungeon.breakTimeVarianceSeconds", 10);
-        config.addDefault("dungeons.testdungeon.breakAvgTimeSeconds", 10);
-
-        config.options().copyDefaults(true);
-        saveConfig();
 
         ConfigurationSection dungeons = config.getConfigurationSection("dungeons");
 
