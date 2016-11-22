@@ -20,8 +20,12 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class CivDungeons extends JavaPlugin {
+    private static CivDungeons plugin;
+
     @Override
     public void onEnable() {
+        plugin = this;
+
         File testDungeonFile = new File(getDataFolder().getAbsolutePath() + File.separator + "schematics" +
                 File.separator + "test.schematic");
         if (!testDungeonFile.exists()) {
@@ -67,12 +71,12 @@ public class CivDungeons extends JavaPlugin {
             try {
                 if (type.equals("PersistentDungeon")) {
                     this.dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
-                            schematicFile, this));
+                            schematicFile));
                 } else if (type.equals("DecayDungeon")) {
                     int variance = dungeons.getInt(dungeon + ".breakTimeVarianceSeconds");
                     int avgTime = dungeons.getInt(dungeon + ".breakAvgTimeSeconds");
 
-                    this.dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon, schematicFile, this,
+                    this.dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon, schematicFile,
                             variance * 20, avgTime * 20));
                 }
             } catch (IOException e) {
@@ -81,6 +85,10 @@ public class CivDungeons extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static CivDungeons getPlugin() {
+        return plugin;
     }
 
     public HashMap<String, Dungeon> dungeons = new HashMap<>();

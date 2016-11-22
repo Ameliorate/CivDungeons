@@ -15,17 +15,16 @@ import java.util.logging.Level;
 public class PersistentDungeon extends Dungeon {
     @SuppressWarnings("deprecation")
     public PersistentDungeon(Location spawnLocation, Location exitLocation,
-                             String name, File schematic, CivDungeons mainPlugin) throws IOException, DataException {
+                             String name, File schematic) throws IOException, DataException {
         super(spawnLocation, exitLocation, name,
                 SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
                 SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
-                SchematicFormat.getFormat(schematic).load(schematic).getLength(),  // super.
-                mainPlugin);
+                SchematicFormat.getFormat(schematic).load(schematic).getLength());  // super.
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
-            mainPlugin.getLogger().log(Level.INFO, "Building dungeon " + name);
+            CivDungeons.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
             buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));
             new Location(dungeonWorld, -50, 50, -50).getBlock().setType(Material.BEDROCK);
-            mainPlugin.getLogger().log(Level.INFO, "Finished building dungeon " + name);
+            CivDungeons.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
         }
     }
 }

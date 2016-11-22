@@ -19,27 +19,25 @@ public abstract class Dungeon {
     /**
      * Creates a new dungeon, loading it from disc.
      */
-    public Dungeon(Location spawnLocation, Location exitLocation, String name, int maxX, int maxY, int maxZ, CivDungeons mainPlugin) {
+    public Dungeon(Location spawnLocation, Location exitLocation, String name, int maxX, int maxY, int maxZ) {
         this.spawnLocation = spawnLocation;
         this.exitLocation = exitLocation;
-        this.mainPlugin = mainPlugin;
         this.maxX = maxX;
         this.maxY = maxY;
         this.maxZ = maxZ;
 
         WorldCreator worldCreator = new WorldCreator("dungeon_" + name);
         worldCreator.generator(new VoidGenerator());
-        dungeonWorld = mainPlugin.getServer().createWorld(worldCreator);
+        dungeonWorld = CivDungeons.getPlugin().getServer().createWorld(worldCreator);
 
         if (spawnLocation.getWorld() == null) {
             spawnLocation.setWorld(dungeonWorld);
         }
 
-        mainPlugin.getServer().getPluginManager().registerEvents(new DungeonWorldBorder(this), mainPlugin);
+        CivDungeons.getPlugin().getServer().getPluginManager().registerEvents(new DungeonWorldBorder(this), CivDungeons.getPlugin());
     }
 
     protected World dungeonWorld;
-    private CivDungeons mainPlugin;
 
     private Location spawnLocation;
     private Location exitLocation;
