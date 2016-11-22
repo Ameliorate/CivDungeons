@@ -11,7 +11,7 @@ import java.util.logging.Level;
 public class DecayDungeon extends Dungeon {
     @SuppressWarnings("deprecation")
     public DecayDungeon(Location spawnLocation, Location exitLocation,
-                        String name, File schematic, Main mainPlugin,
+                        String name, File schematic, CivDungeons mainPlugin,
                         int avgTime, int variance) throws IOException, DataException {
         super(spawnLocation, exitLocation, name,
                 SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even

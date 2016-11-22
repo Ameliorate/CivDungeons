@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public class PersistentDungeon extends Dungeon {
     @SuppressWarnings("deprecation")
     public PersistentDungeon(Location spawnLocation, Location exitLocation,
-                             String name, File schematic, Main mainPlugin) throws IOException, DataException {
+                             String name, File schematic, CivDungeons mainPlugin) throws IOException, DataException {
         super(spawnLocation, exitLocation, name,
                 SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
                 SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling

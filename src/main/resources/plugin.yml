@@ -5,4 +5,4 @@ authors: [Amelorate]
 website: https://github.com/Ameliorate/CivDungeons
 depend: [WorldEdit]
 
-main: org.ame.civdungeons.Main
+main: org.ame.civdungeons.CivDungeonsungeons

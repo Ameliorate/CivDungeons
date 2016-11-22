@@ -21,7 +21,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 class DecayListener implements Listener {
-    DecayListener(Main mainPlugin, Dungeon dungeon, int avgTime, int variance, int blockOffset) {
+    DecayListener(CivDungeons mainPlugin, Dungeon dungeon, int avgTime, int variance, int blockOffset) {
         this.mainPlugin = mainPlugin;
         this.dungeon = dungeon;
         this.avgTime = avgTime;
@@ -31,7 +31,7 @@ class DecayListener implements Listener {
         mainPlugin.getServer().getPluginManager().registerEvents(this, mainPlugin);
     }
 
-    private Main mainPlugin;
+    private CivDungeons mainPlugin;
     private Dungeon dungeon;
     private int avgTime;
     private int variance;

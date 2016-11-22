@@ -19,7 +19,7 @@ public abstract class Dungeon {
     /**
      * Creates a new dungeon, loading it from disc.
      */
-    public Dungeon(Location spawnLocation, Location exitLocation, String name, int maxX, int maxY, int maxZ, Main mainPlugin) {
+    public Dungeon(Location spawnLocation, Location exitLocation, String name, int maxX, int maxY, int maxZ, CivDungeons mainPlugin) {
         this.spawnLocation = spawnLocation;
         this.exitLocation = exitLocation;
         this.mainPlugin = mainPlugin;
@@ -39,7 +39,7 @@ public abstract class Dungeon {
     }
 
     protected World dungeonWorld;
-    private Main mainPlugin;
+    private CivDungeons mainPlugin;
 
     private Location spawnLocation;
     private Location exitLocation;

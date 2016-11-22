@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-public class Main extends JavaPlugin {
+public class CivDungeons extends JavaPlugin {
     @Override
     public void onEnable() {
         File testDungeonFile = new File(getDataFolder().getAbsolutePath() + File.separator + "schematics" +
