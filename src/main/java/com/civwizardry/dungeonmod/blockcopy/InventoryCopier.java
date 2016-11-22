@@ -1,4 +1,4 @@
-package org.ame.civdungeons.blockcopy;
+package com.civwizardry.dungeonmod.blockcopy;
 
 import org.bukkit.block.*;
 

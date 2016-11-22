@@ -1,4 +1,4 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
 import com.sk89q.worldedit.data.DataException;
 import org.apache.logging.log4j.core.config.ConfigurationException;
@@ -20,9 +20,9 @@ public class ConfigManager {
     private ConfigManager() {}
 
     public static void reload() {
-        CivDungeons.getPlugin().saveDefaultConfig();
-        CivDungeons.getPlugin().reloadConfig();
-        config = CivDungeons.getPlugin().getConfig();
+        DungeonMod.getPlugin().saveDefaultConfig();
+        DungeonMod.getPlugin().reloadConfig();
+        config = DungeonMod.getPlugin().getConfig();
 
         ConfigurationSection dungeonsSection = config.getConfigurationSection("dungeons");
 
@@ -42,10 +42,10 @@ public class ConfigManager {
             float exitZ = (float) dungeonsSection.getDouble(dungeon + ".exitZ", 0);
             String exitWorld = dungeonsSection.getString(dungeon + ".exitWorld", "world");
 
-            Location dungeonExit = new Location(CivDungeons.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
+            Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
             String schematic = dungeonsSection.getString(dungeon+ ".schematic", "test");
             System.out.println(schematic);
-            File schematicFile = new File(CivDungeons.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "schematics" +
+            File schematicFile = new File(DungeonMod.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "schematics" +
                     File.separator + schematic + ".schematic");
 
             try {

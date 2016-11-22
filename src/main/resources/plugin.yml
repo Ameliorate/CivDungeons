@@ -1,8 +1,8 @@
-name: civ-dungeons
+name: DungeonMod
 version: @version@-@apiversion@
 description: Adds functionality for creating dungeons where blocks placed will disapear after time.
 authors: [Amelorate]
 website: https://github.com/Ameliorate/CivDungeons
 depend: [WorldEdit]
 
-main: org.ame.civdungeons.CivDungeons
+main: com.civwizardry.dungeonmod.DungeonMod

@@ -1,9 +1,9 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
-import org.ame.civdungeons.blockcopy.CopyBlock;
-import org.ame.civdungeons.blockcopy.InventoryCopier;
-import org.ame.civdungeons.blockcopy.MetaCopier;
-import org.ame.civdungeons.blockcopy.TypeCopier;
+import com.civwizardry.dungeonmod.blockcopy.CopyBlock;
+import com.civwizardry.dungeonmod.blockcopy.InventoryCopier;
+import com.civwizardry.dungeonmod.blockcopy.MetaCopier;
+import com.civwizardry.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -13,8 +13,8 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class CivDungeons extends JavaPlugin {
-    private static CivDungeons plugin;
+public class DungeonMod extends JavaPlugin {
+    private static DungeonMod plugin;
 
     @Override
     public void onEnable() {
@@ -39,7 +39,7 @@ public class CivDungeons extends JavaPlugin {
         CopyBlock.addBlockCopier(new InventoryCopier(), 3);
     }
 
-    public static CivDungeons getPlugin() {
+    public static DungeonMod getPlugin() {
         return plugin;
     }
 

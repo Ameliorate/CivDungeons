@@ -1,6 +1,6 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
-import org.ame.civdungeons.blockcopy.CopyBlock;
+import com.civwizardry.dungeonmod.blockcopy.CopyBlock;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +27,7 @@ class DecayListener implements Listener {
         this.variance = variance;
         this.blockOffset = blockOffset;
 
-        CivDungeons.getPlugin().getServer().getPluginManager().registerEvents(this, CivDungeons.getPlugin());
+        DungeonMod.getPlugin().getServer().getPluginManager().registerEvents(this, DungeonMod.getPlugin());
     }
 
     private Dungeon dungeon;
@@ -50,7 +50,7 @@ class DecayListener implements Listener {
         int delay = semiDelay + avgTime;
         final BlockState dest = broken.getState();  // Array to get around lambda issues.
 
-        CivDungeons.getPlugin().getServer().getScheduler().runTaskLater(CivDungeons.getPlugin(), () -> {
+        DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
             Block template =
                     new Location(dungeon.dungeonWorld, broken.getX() - blockOffset, broken.getY(), broken.getZ())
                     .getBlock();
@@ -133,7 +133,7 @@ class DecayListener implements Listener {
         BlockState placedCopy = placed.getState();
         Collection<ItemStack> drops = placed.getDrops();
 
-        CivDungeons.getPlugin().getServer().getScheduler().runTaskLater(CivDungeons.getPlugin(), () -> {
+        DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
             if (placedCopy.getBlock().getType() == Material.AIR) {
                 return;
             }

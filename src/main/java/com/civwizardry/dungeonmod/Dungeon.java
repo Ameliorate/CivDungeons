@@ -1,4 +1,4 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
@@ -28,13 +28,13 @@ public abstract class Dungeon {
 
         WorldCreator worldCreator = new WorldCreator("dungeon_" + name);
         worldCreator.generator(new VoidGenerator());
-        dungeonWorld = CivDungeons.getPlugin().getServer().createWorld(worldCreator);
+        dungeonWorld = DungeonMod.getPlugin().getServer().createWorld(worldCreator);
 
         if (spawnLocation.getWorld() == null) {
             spawnLocation.setWorld(dungeonWorld);
         }
 
-        CivDungeons.getPlugin().getServer().getPluginManager().registerEvents(new DungeonWorldBorder(this), CivDungeons.getPlugin());
+        DungeonMod.getPlugin().getServer().getPluginManager().registerEvents(new DungeonWorldBorder(this), DungeonMod.getPlugin());
     }
 
     protected World dungeonWorld;

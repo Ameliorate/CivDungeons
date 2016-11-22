@@ -1,4 +1,4 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

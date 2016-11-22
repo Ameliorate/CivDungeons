@@ -1,4 +1,4 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.SchematicFormat;
@@ -17,10 +17,10 @@ public class DecayDungeon extends Dungeon {
                 SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
                 SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
                 SchematicFormat.getFormat(schematic).load(schematic).getLength());  // super.
-        CivDungeons.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
+        DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));
         buildDungeon(schematic, new Location(dungeonWorld, 0 - getMaxX(), 0, 0));
-        CivDungeons.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
+        DungeonMod.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
         new DecayListener(this, avgTime, variance, getMaxX());
     }
 }

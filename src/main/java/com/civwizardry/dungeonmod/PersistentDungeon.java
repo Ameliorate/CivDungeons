@@ -1,4 +1,4 @@
-package org.ame.civdungeons;
+package com.civwizardry.dungeonmod;
 
 import com.sk89q.worldedit.data.DataException;
 import com.sk89q.worldedit.schematic.SchematicFormat;
@@ -21,10 +21,10 @@ public class PersistentDungeon extends Dungeon {
                 SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
                 SchematicFormat.getFormat(schematic).load(schematic).getLength());  // super.
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
-            CivDungeons.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
+            DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
             buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));
             new Location(dungeonWorld, -50, 50, -50).getBlock().setType(Material.BEDROCK);
-            CivDungeons.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
+            DungeonMod.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
         }
     }
 }
