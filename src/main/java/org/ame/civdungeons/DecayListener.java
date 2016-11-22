@@ -21,17 +21,15 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 class DecayListener implements Listener {
-    DecayListener(CivDungeons mainPlugin, Dungeon dungeon, int avgTime, int variance, int blockOffset) {
-        this.mainPlugin = mainPlugin;
+    DecayListener(Dungeon dungeon, int avgTime, int variance, int blockOffset) {
         this.dungeon = dungeon;
         this.avgTime = avgTime;
         this.variance = variance;
         this.blockOffset = blockOffset;
 
-        mainPlugin.getServer().getPluginManager().registerEvents(this, mainPlugin);
+        CivDungeons.getPlugin().getServer().getPluginManager().registerEvents(this, CivDungeons.getPlugin());
     }
 
-    private CivDungeons mainPlugin;
     private Dungeon dungeon;
     private int avgTime;
     private int variance;
@@ -52,7 +50,7 @@ class DecayListener implements Listener {
         int delay = semiDelay + avgTime;
         final BlockState dest = broken.getState();  // Array to get around lambda issues.
 
-        mainPlugin.getServer().getScheduler().runTaskLater(mainPlugin, () -> {
+        CivDungeons.getPlugin().getServer().getScheduler().runTaskLater(CivDungeons.getPlugin(), () -> {
             Block template =
                     new Location(dungeon.dungeonWorld, broken.getX() - blockOffset, broken.getY(), broken.getZ())
                     .getBlock();
@@ -135,7 +133,7 @@ class DecayListener implements Listener {
         BlockState placedCopy = placed.getState();
         Collection<ItemStack> drops = placed.getDrops();
 
-        mainPlugin.getServer().getScheduler().runTaskLater(mainPlugin, () -> {
+        CivDungeons.getPlugin().getServer().getScheduler().runTaskLater(CivDungeons.getPlugin(), () -> {
             if (placedCopy.getBlock().getType() == Material.AIR) {
                 return;
             }

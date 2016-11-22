@@ -21,6 +21,6 @@ public class DecayDungeon extends Dungeon {
         buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));
         buildDungeon(schematic, new Location(dungeonWorld, 0 - getMaxX(), 0, 0));
         CivDungeons.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
-        new DecayListener(CivDungeons.getPlugin(), this, avgTime, variance, getMaxX());
+        new DecayListener(this, avgTime, variance, getMaxX());
     }
 }
