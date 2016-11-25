@@ -23,3 +23,6 @@ buildNumber.properties
 
 # dumb kde stuff
 .directory
+
+# test server
+/testserver/
