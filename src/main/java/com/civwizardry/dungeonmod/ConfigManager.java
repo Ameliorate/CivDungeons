@@ -1,7 +1,6 @@
 package com.civwizardry.dungeonmod;
 
 import com.sk89q.worldedit.data.DataException;
-import org.apache.logging.log4j.core.config.ConfigurationException;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 /**
  * Parses the config to a convent getter interface.
@@ -29,7 +29,9 @@ public class ConfigManager {
         for (String dungeon : dungeonsSection.getKeys(false)) {
             String type = dungeonsSection.getString(dungeon + ".type", "DecayDungeon");
             if (!(type.equals("PersistentDungeon") || type.equals("DecayDungeon"))) {
-                throw new ConfigurationException("config.dungeons.testdungeon.type must be PersistentDungeon or DecayDungeon");
+                DungeonMod.getPlugin().getLogger().log(Level.WARNING, "dungeons." + dungeon + ".type is neither" +
+                        " PersistentDungeon nor DecayDungeon. Defaulting to DecayDungeon.");
+                type = "DecayDungeon";
             }
 
             float spawnX = (float) dungeonsSection.getDouble(dungeon + ".spawnX", 2);
