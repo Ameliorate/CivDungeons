@@ -43,6 +43,10 @@ public class ConfigManager {
             float exitZ = (float) dungeonsSection.getDouble(dungeon + ".exitZ", 0);
             String exitWorld = dungeonsSection.getString(dungeon + ".exitWorld", "world");
 
+            int maxX = dungeonsSection.getInt(dungeon + ".maxX");
+            int maxY = dungeonsSection.getInt(dungeon + ".maxY");
+            int maxZ = dungeonsSection.getInt(dungeon + ".maxZ");
+
             Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
             String schematic = dungeonsSection.getString(dungeon+ ".schematic", "test");
             System.out.println(schematic);
@@ -52,13 +56,13 @@ public class ConfigManager {
             try {
                 if (type.equals("PersistentDungeon")) {
                     dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
-                            schematicFile, 100, 100, 100)); // TODO: add max size to config or world zip or something
+                            schematicFile, maxX, maxY, maxZ));
                 } else if (type.equals("DecayDungeon")) {
                     int variance = dungeonsSection.getInt(dungeon + ".breakTimeVarianceSeconds", 10);
                     int avgTime = dungeonsSection.getInt(dungeon + ".breakAvgTimeSeconds", 10);
 
                     dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon, schematicFile,
-                            variance * 20, avgTime * 20, 100, 100, 100)); // TODO: same here as above
+                            variance * 20, avgTime * 20, maxX, maxY, maxZ));
                 }
             } catch (IOException e) {
                 throw new UncheckedIOException(e);

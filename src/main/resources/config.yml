@@ -8,6 +8,9 @@ dungeons:
     exitX: 0
     exitY: 128
     exitZ: 0
+    maxX: 100
+    maxY: 64
+    maxZ: 100
     exitWorld: world
     breakTimeVarianceSeconds: 10
     breakAvgTimeSeconds: 10
