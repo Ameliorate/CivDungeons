@@ -1,7 +1,5 @@
 package pw.amel.dungeonmod;
 
-import com.sk89q.worldedit.data.DataException;
-import com.sk89q.worldedit.schematic.SchematicFormat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -13,13 +11,10 @@ import java.util.logging.Level;
  * A kind of dungeon where blocks placed inside never reset.
  */
 public class PersistentDungeon extends Dungeon {
-    @SuppressWarnings("deprecation")
     public PersistentDungeon(Location spawnLocation, Location exitLocation,
-                             String name, File schematic) throws IOException, DataException {
-        super(spawnLocation, exitLocation, name,
-                SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
-                SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
-                SchematicFormat.getFormat(schematic).load(schematic).getLength());  // super.
+                             String name, File schematic,
+                             int maxX, int maxY, int maxZ) throws IOException {
+        super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
             DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
             buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));

@@ -1,7 +1,5 @@
 package pw.amel.dungeonmod;
 
-import com.sk89q.worldedit.data.DataException;
-import com.sk89q.worldedit.schematic.SchematicFormat;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -12,11 +10,9 @@ public class DecayDungeon extends Dungeon {
     @SuppressWarnings("deprecation")
     public DecayDungeon(Location spawnLocation, Location exitLocation,
                         String name, File schematic,
-                        int avgTime, int variance) throws IOException, DataException {
-        super(spawnLocation, exitLocation, name,
-                SchematicFormat.getFormat(schematic).load(schematic).getWidth(),   // Blame java, you can't even
-                SchematicFormat.getFormat(schematic).load(schematic).getHeight(),  // have variables before calling
-                SchematicFormat.getFormat(schematic).load(schematic).getLength());  // super.
+                        int avgTime, int variance,
+                        int maxX, int maxY, int maxZ) throws IOException {
+        super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         buildDungeon(schematic, new Location(dungeonWorld, 0, 0, 0));
         buildDungeon(schematic, new Location(dungeonWorld, 0 - getMaxX(), 0, 0));

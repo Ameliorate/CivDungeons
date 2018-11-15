@@ -1,6 +1,5 @@
 package pw.amel.dungeonmod;
 
-import com.sk89q.worldedit.data.DataException;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,18 +52,16 @@ public class ConfigManager {
             try {
                 if (type.equals("PersistentDungeon")) {
                     dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
-                            schematicFile));
+                            schematicFile, 100, 100, 100)); // TODO: add max size to config or world zip or something
                 } else if (type.equals("DecayDungeon")) {
                     int variance = dungeonsSection.getInt(dungeon + ".breakTimeVarianceSeconds", 10);
                     int avgTime = dungeonsSection.getInt(dungeon + ".breakAvgTimeSeconds", 10);
 
                     dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon, schematicFile,
-                            variance * 20, avgTime * 20));
+                            variance * 20, avgTime * 20, 100, 100, 100)); // TODO: same here as above
                 }
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
-            } catch (@SuppressWarnings("deprecation") DataException e) {
-                e.printStackTrace();
             }
         }
     }
