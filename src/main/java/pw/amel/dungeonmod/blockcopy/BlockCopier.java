@@ -1,4 +1,4 @@
-package com.civwizardry.dungeonmod.blockcopy;
+package pw.amel.dungeonmod.blockcopy;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;

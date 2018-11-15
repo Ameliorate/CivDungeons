@@ -1,6 +1,6 @@
-package com.civwizardry.dungeonmod;
+package pw.amel.dungeonmod;
 
-import com.civwizardry.dungeonmod.blockcopy.CopyBlock;
+import pw.amel.dungeonmod.blockcopy.CopyBlock;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;

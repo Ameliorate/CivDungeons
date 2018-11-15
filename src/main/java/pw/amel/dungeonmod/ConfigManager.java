@@ -1,4 +1,4 @@
-package com.civwizardry.dungeonmod;
+package pw.amel.dungeonmod;
 
 import com.sk89q.worldedit.data.DataException;
 import org.bukkit.Location;

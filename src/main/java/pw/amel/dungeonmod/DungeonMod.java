@@ -1,9 +1,9 @@
-package com.civwizardry.dungeonmod;
+package pw.amel.dungeonmod;
 
-import com.civwizardry.dungeonmod.blockcopy.CopyBlock;
-import com.civwizardry.dungeonmod.blockcopy.InventoryCopier;
-import com.civwizardry.dungeonmod.blockcopy.MetaCopier;
-import com.civwizardry.dungeonmod.blockcopy.TypeCopier;
+import pw.amel.dungeonmod.blockcopy.CopyBlock;
+import pw.amel.dungeonmod.blockcopy.InventoryCopier;
+import pw.amel.dungeonmod.blockcopy.MetaCopier;
+import pw.amel.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;

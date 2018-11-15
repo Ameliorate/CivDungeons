@@ -1,4 +1,4 @@
-package com.civwizardry.dungeonmod;
+package pw.amel.dungeonmod;
 
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
