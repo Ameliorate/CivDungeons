@@ -73,6 +73,7 @@ public class ConfigManager {
     private static HashMap<String, Dungeon> dungeons = new HashMap<>();
 
     public static Dungeon getDungeon(String name) {
+        name = name.replaceAll("^dungeon_", "");
         return dungeons.get(name);
     }
 }

@@ -24,6 +24,9 @@ public class DungeonWorldBorder implements Listener {
             return;
         }
 
+        if (event.getPlayer().getInventory().getHelmet().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "Construction Helmet"))
+            return;
+
         if (playerLocation.getX() < 0 ||
                 playerLocation.getY() < 0 ||
                 playerLocation.getZ() < 0) {

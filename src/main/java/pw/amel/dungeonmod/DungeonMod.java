@@ -5,6 +5,7 @@ import pw.amel.dungeonmod.blockcopy.InventoryCopier;
 import pw.amel.dungeonmod.blockcopy.MetaCopier;
 import pw.amel.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
+import pw.amel.dungeonmod.command.ConstructionHelmetTeleport;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,8 @@ public class DungeonMod extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+
+        getServer().getPluginManager().registerEvents(new ConstructionHelmetTeleport(), this);
 
         File testDungeonFile = new File(getDataFolder().getAbsolutePath() + File.separator + "schematics" +
                 File.separator + "test.schematic");
