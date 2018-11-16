@@ -4,9 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
@@ -48,24 +45,15 @@ public class ConfigManager {
             int maxZ = dungeonsSection.getInt(dungeon + ".maxZ");
 
             Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
-            String schematic = dungeonsSection.getString(dungeon+ ".schematic", "test");
-            System.out.println(schematic);
-            File schematicFile = new File(DungeonMod.getPlugin().getDataFolder().getAbsolutePath() + File.separator + "schematics" +
-                    File.separator + schematic + ".schematic");
 
-            try {
-                if (type.equals("PersistentDungeon")) {
-                    dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
-                            schematicFile, maxX, maxY, maxZ));
-                } else if (type.equals("DecayDungeon")) {
-                    int variance = dungeonsSection.getInt(dungeon + ".breakTimeVarianceSeconds", 10);
-                    int avgTime = dungeonsSection.getInt(dungeon + ".breakAvgTimeSeconds", 10);
+            if (type.equals("PersistentDungeon")) {
+                dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon, maxX, maxY, maxZ));
+            } else if (type.equals("DecayDungeon")) {
+                int variance = dungeonsSection.getInt(dungeon + ".breakTimeVarianceSeconds", 10);
+                int avgTime = dungeonsSection.getInt(dungeon + ".breakAvgTimeSeconds", 10);
 
-                    dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon, schematicFile,
-                            variance * 20, avgTime * 20, maxX, maxY, maxZ));
-                }
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
+                dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon,
+                        variance * 20, avgTime * 20, maxX, maxY, maxZ));
             }
         }
     }

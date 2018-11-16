@@ -42,6 +42,8 @@ class DecayListener implements Listener {
             return;
         } else if (blockLock.contains(broken.getLocation())) {
             return;
+        } else if (broken.getLocation().getX() < 0) {
+            return;
         }
 
         blockLock.add(broken.getLocation());
@@ -52,7 +54,7 @@ class DecayListener implements Listener {
 
         DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
             Block template =
-                    new Location(dungeon.dungeonWorld, broken.getX() - blockOffset, broken.getY(), broken.getZ())
+                    new Location(dungeon.dungeonWorld, broken.getX() - blockOffset - 1, broken.getY(), broken.getZ())
                     .getBlock();
 
             CopyBlock.copyBlock(template, dest);
@@ -122,6 +124,8 @@ class DecayListener implements Listener {
         if (placed.getLocation().getWorld() != dungeon.dungeonWorld) {
             return;
         } else if (blockLock.contains(placed.getLocation())) {
+            return;
+        } else if (placed.getLocation().getX() < 0) {
             return;
         }
 

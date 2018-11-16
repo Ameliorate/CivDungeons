@@ -3,6 +3,19 @@ version: @version@-@apiversion@
 description: Adds functionality for creating dungeons where blocks placed will disapear after time.
 authors: [Amelorate]
 website: https://github.com/CivWizardry/DungeonMod
-depend: [WorldEdit]
 
 main: pw.amel.dungeonmod.DungeonMod
+
+commands:
+  dungeonedit:
+    description: Edit the given dungeon.
+    usage: /dungeonedit [dungeon]
+    permission: dungeonmod.edit
+
+permissions:
+  dungeonmod.*:
+    description: Gives access to all DungeonMod commands.
+    children:
+      dungeonmod.edit: true
+  dungeonmod.edit:
+    description: Allows editing any dungeon using the /dungeonedit command.

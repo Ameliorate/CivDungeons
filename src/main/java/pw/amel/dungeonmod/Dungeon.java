@@ -5,9 +5,6 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
-
 public abstract class Dungeon {
     /**
      * Creates a new dungeon, loading it from disc.
@@ -50,26 +47,23 @@ public abstract class Dungeon {
         return maxZ;
     }
 
+    public Location getExitLocation() {
+        return exitLocation.clone();
+    }
+
+    public Location getSpawnLocation() {
+        return spawnLocation.clone();
+    }
+
     public void teleportPlayerToSpawn(Player player) {
-        player.teleport(spawnLocation);
+        player.teleport(getSpawnLocation());
     }
 
     public void teleportPlayerToExit(Player player) {
-        player.teleport(exitLocation);
+        player.teleport(getExitLocation());
     }
 
-    /**
-     * Builds the dungeon from a schematic, deleting the old dungeon if needed.
-     */
-    protected void buildDungeon(File schematic, Location location) throws IOException {
-//        SchematicFormat schematicFormat = SchematicFormat.getFormat(schematic);
-//        CuboidClipboard paste = schematicFormat.load(schematic);
-//
-//        EditSession session = new EditSession(BukkitUtil.getLocalWorld(dungeonWorld), -1);
-//        try {
-//            paste.paste(session, new Vector(location.getX(), location.getY(), location.getZ()), false);
-//        } catch (MaxChangedBlocksException e) {
-//            throw new AssertionError("MaxChangedBlocks is supposed to be infinity", e);
-//        }
+    public void teleportPlayerToTemplate(Player player) {
+        teleportPlayerToSpawn(player);
     }
 }

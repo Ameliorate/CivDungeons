@@ -6,25 +6,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import pw.amel.dungeonmod.ConfigManager;
 import pw.amel.dungeonmod.Dungeon;
 
 public class ConstructionHelmetTeleport implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     private void onInventoryClickEvent(InventoryClickEvent event) {
-        ClickType click = event.getClick();
-        if (!event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "Construction Helmet"))
+        if (event.getCurrentItem().getType() != Material.GOLD_HELMET)
             return;
-        else if (click != ClickType.DOUBLE_CLICK && click != ClickType.CONTROL_DROP && click != ClickType.DROP && click != ClickType.LEFT &&
-                click != ClickType.NUMBER_KEY && click != ClickType.RIGHT && click != ClickType.SHIFT_LEFT && click != ClickType.SHIFT_RIGHT)
+        InventoryAction click = event.getAction();
+        if (!event.getCurrentItem().hasItemMeta() || !event.getCurrentItem().getItemMeta().hasDisplayName() ||
+                !event.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "Construction Helmet"))
+            return;
+        else if (click == InventoryAction.UNKNOWN || click == InventoryAction.NOTHING)
             return;
 
         event.setCancelled(true);
-        event.getClickedInventory().getItem(event.getSlot()).setType(Material.AIR);
+        event.getClickedInventory().setItem(event.getSlot(), new ItemStack(Material.AIR));
 
         Player player = (Player) event.getWhoClicked();
+        player.updateInventory();
 
         String worldName = player.getLocation().getWorld().getName();
         Dungeon dungeon = ConfigManager.getDungeon(worldName);
