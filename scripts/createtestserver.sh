@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 gitroot="$(git rev-parse --show-toplevel)"
 currentdir="$(pwd)"
@@ -13,5 +13,5 @@ wget -O "$gitroot/testserver/BuildTools.jar" https://hub.spigotmc.org/jenkins/jo
 git config --global --unset core.autocrlf
 cd "$gitroot/testserver" # cd into testserver to work around buildtools placing files in the current dir rather than
                          # the dir buildtools is in.
-java -jar "$gitroot/testserver/BuildTools.jar" -rev 1.10
+java -jar "$gitroot/testserver/BuildTools.jar" -rev 1.12.2
 cd "$currentdir"
