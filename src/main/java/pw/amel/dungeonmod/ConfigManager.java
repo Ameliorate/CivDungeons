@@ -45,8 +45,6 @@ public class ConfigManager {
             int maxZ = dungeonsSection.getInt(dungeon + ".maxZ");
 
             boolean generateBedrockBox = dungeonsSection.getBoolean(dungeon + ".generateBedrockBox", true);
-            System.out.println(generateBedrockBox);
-            System.out.println(dungeon);
 
             Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
 
