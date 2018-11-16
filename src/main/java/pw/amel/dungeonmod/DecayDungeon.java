@@ -2,6 +2,7 @@ package pw.amel.dungeonmod;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import pw.amel.dungeonmod.blockcopy.CopyBlock;
@@ -11,10 +12,10 @@ import java.util.logging.Level;
 
 public class DecayDungeon extends Dungeon {
     public DecayDungeon(Location spawnLocation, Location exitLocation,
-                        String name, boolean generateBedrockBox,
+                        String name, boolean generateBedrockBox, World.Environment environment,
                         int avgTime, int variance,
                         int maxX, int maxY, int maxZ) {
-        super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
+        super(spawnLocation, exitLocation, name, environment,  maxX, maxY, maxZ);
         new DecayListener(this, avgTime, variance, getMaxX());
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {

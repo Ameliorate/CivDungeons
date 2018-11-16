@@ -9,7 +9,7 @@ public abstract class Dungeon {
     /**
      * Creates a new dungeon, loading it from disc.
      */
-    public Dungeon(Location spawnLocation, Location exitLocation, String name, int maxX, int maxY, int maxZ) {
+    public Dungeon(Location spawnLocation, Location exitLocation, String name, World.Environment environment, int maxX, int maxY, int maxZ) {
         this.spawnLocation = spawnLocation;
         this.exitLocation = exitLocation;
         this.maxX = maxX;
@@ -18,6 +18,8 @@ public abstract class Dungeon {
 
         WorldCreator worldCreator = new WorldCreator("dungeon_" + name);
         worldCreator.generator(new VoidGenerator());
+        worldCreator.generateStructures(false);
+        worldCreator.environment(environment);
         dungeonWorld = DungeonMod.getPlugin().getServer().createWorld(worldCreator);
 
         if (spawnLocation.getWorld() == null) {
