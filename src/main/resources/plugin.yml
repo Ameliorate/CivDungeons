@@ -12,11 +12,19 @@ commands:
     usage: /dungeonedit [dungeon]
     permission: dungeonmod.edit
     aliases: editdungeon
+  dungeonreload:
+    description: Reload a given DecayDungeon from the template.
+    usage: /dungeonreload [dungeon]
+    permission: dungeonmod.reloaddungeon
+    aliases: reloaddungeon
 
 permissions:
   dungeonmod.*:
     description: Gives access to all DungeonMod commands.
     children:
       dungeonmod.edit: true
+      dungeonmod.reloaddungeon: true
   dungeonmod.edit:
     description: Allows editing any dungeon using the /dungeonedit command.
+  dungeonmod.reloaddungeon:
+    description: Allows reloading any DecayDungeon from its template using the /dungeonreload command.

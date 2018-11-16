@@ -7,6 +7,7 @@ import pw.amel.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
 import pw.amel.dungeonmod.command.ConstructionHelmetTeleport;
 import pw.amel.dungeonmod.command.DungeonEdit;
+import pw.amel.dungeonmod.command.DungeonReload;
 
 public class DungeonMod extends JavaPlugin {
     private static DungeonMod plugin;
@@ -19,6 +20,7 @@ public class DungeonMod extends JavaPlugin {
         CopyBlock.addBlockCopier(new MetaCopier(), 2);
         CopyBlock.addBlockCopier(new InventoryCopier(), 3);
 
+        getCommand("dungeonreload").setExecutor(new DungeonReload());
         getCommand("dungeonedit").setExecutor(new DungeonEdit());
         getServer().getPluginManager().registerEvents(new ConstructionHelmetTeleport(), this);
 
