@@ -11,33 +11,38 @@ import java.util.logging.Level;
 
 public class DecayDungeon extends Dungeon {
     public DecayDungeon(Location spawnLocation, Location exitLocation,
-                        String name,
+                        String name, boolean generateBedrockBox,
                         int avgTime, int variance,
                         int maxX, int maxY, int maxZ) {
         super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
         new DecayListener(this, avgTime, variance, getMaxX());
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
-            DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building bedrock box");
-            // Start building a box around the dungeon template area.
-            for (int x = -getMaxX() - 1; x <= -1; x++) {
-                for (int z = 0; z <= getMaxZ(); z++) {
-                    new Location(dungeonWorld, x, 0, z).getBlock().setType(Material.BEDROCK);
-                    new Location(dungeonWorld, x, getMaxY(), z).getBlock().setType(Material.BEDROCK);
-                }
-            }
-
-            for (int y = 0; y <= getMaxY(); y++) {
+            if (generateBedrockBox) {
+                DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building bedrock box");
+                // Start building a box around the dungeon template area.
                 for (int x = -getMaxX() - 1; x <= -1; x++) {
-                    new Location(dungeonWorld, x, y, 0).getBlock().setType(Material.BEDROCK);
-                    new Location(dungeonWorld, x, y, getMaxZ()).getBlock().setType(Material.BEDROCK);
+                    for (int z = 0; z <= getMaxZ(); z++) {
+                        new Location(dungeonWorld, x, 0, z).getBlock().setType(Material.BEDROCK);
+                        new Location(dungeonWorld, x, getMaxY(), z).getBlock().setType(Material.BEDROCK);
+                    }
                 }
-                for (int z = 0; z <= getMaxZ(); z++) {
-                    new Location(dungeonWorld, -1, y, z).getBlock().setType(Material.BEDROCK);
-                    new Location(dungeonWorld, -getMaxX() - 1, y, z).getBlock().setType(Material.BEDROCK);
+
+                for (int y = 0; y <= getMaxY(); y++) {
+                    for (int x = -getMaxX() - 1; x <= -1; x++) {
+                        new Location(dungeonWorld, x, y, 0).getBlock().setType(Material.BEDROCK);
+                        new Location(dungeonWorld, x, y, getMaxZ()).getBlock().setType(Material.BEDROCK);
+                    }
+                    for (int z = 0; z <= getMaxZ(); z++) {
+                        new Location(dungeonWorld, -1, y, z).getBlock().setType(Material.BEDROCK);
+                        new Location(dungeonWorld, -getMaxX() - 1, y, z).getBlock().setType(Material.BEDROCK);
+                    }
                 }
+                // Finish building the box.
+            } else {
+                // Something for the player to stand on.
+                getSpawnLocation().add(-getMaxX() -1, -1, 0).getBlock().setType(Material.BEDROCK);
             }
-            // Finish building the box.
 
             new Location(dungeonWorld, -50, 50, -50).getBlock().setType(Material.BEDROCK);
             // ^^^ Store the fact that the box has already been built before.

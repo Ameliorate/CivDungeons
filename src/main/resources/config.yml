@@ -25,3 +25,4 @@ dungeons:
     maxY: 9
     maxZ: 9
     exitWorld: world_the_end
+    generateBedrockBox: false

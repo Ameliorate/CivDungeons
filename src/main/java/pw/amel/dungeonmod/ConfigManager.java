@@ -44,16 +44,20 @@ public class ConfigManager {
             int maxY = dungeonsSection.getInt(dungeon + ".maxY");
             int maxZ = dungeonsSection.getInt(dungeon + ".maxZ");
 
+            boolean generateBedrockBox = dungeonsSection.getBoolean(dungeon + ".generateBedrockBox", true);
+            System.out.println(generateBedrockBox);
+            System.out.println(dungeon);
+
             Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
 
             if (type.equals("PersistentDungeon")) {
-                dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon, maxX, maxY, maxZ));
+                dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon, generateBedrockBox, maxX, maxY, maxZ));
             } else if (type.equals("DecayDungeon")) {
                 int variance = dungeonsSection.getInt(dungeon + ".breakTimeVarianceSeconds", 10);
                 int avgTime = dungeonsSection.getInt(dungeon + ".breakAvgTimeSeconds", 10);
 
                 dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon,
-                        variance * 20, avgTime * 20, maxX, maxY, maxZ));
+                        generateBedrockBox,variance * 20, avgTime * 20, maxX, maxY, maxZ));
             }
         }
     }
