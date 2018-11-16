@@ -11,6 +11,7 @@ commands:
     description: Edit the given dungeon.
     usage: /dungeonedit [dungeon]
     permission: dungeonmod.edit
+    aliases: editdungeon
 
 permissions:
   dungeonmod.*:
