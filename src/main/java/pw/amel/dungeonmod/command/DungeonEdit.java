@@ -15,23 +15,23 @@ import java.util.ArrayList;
 public class DungeonEdit implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("dungeonmod.edit"))
-            return false;
         if (args.length != 1)
             return false;
-        if (!(sender instanceof Player))
-            return false;
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
+        }
         Player senderPlayer = (Player) sender;
         if (senderPlayer.getInventory().getHelmet() != null) {
             sender.sendMessage(ChatColor.RED + "Please remove your helmet before editing any dungeons.");
             sender.sendMessage(ChatColor.RED + "Editing dungeons requires you wear a magically-summoned hard hat");
-            return false;
+            return true;
         }
 
         String dungeonName = args[0];
         Dungeon dungeon = ConfigManager.getDungeon(dungeonName);
         if (dungeon == null) {
             sender.sendMessage(ChatColor.RED + "Please enter a valid dungeon.");
+            return true;
         }
 
         ItemStack constructionHelmet = new ItemStack(Material.GOLD_HELMET);
