@@ -59,11 +59,20 @@ public class DecayDungeon extends Dungeon {
         player.teleport(templateSpawn);
     }
 
+    /**
+     * rebuild() reports back with a percentage complete every BLOCKS_PER_REPORT when copying over the
+     * dungeon from the template.
+     */
+    private static final int BLOCKS_PER_REPORT = 100_000;
+
     public void rebuild() {
         long blocksToCopy = (long) getMaxX() * (long) getMaxY() * (long) getMaxZ();
-        float percentPerSlice = (float) ((long) getMaxX() * (long) getMaxY()) / blocksToCopy;
-        float percentComplete = 0;
+        long blocksPerSlice = (long) getMaxZ() * (long) getMaxY();
+        long blocksCopied = 0;
+        long blocksCopiedAtLastReport = 0;
+
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Copying " + blocksToCopy + " blocks...");
+
         for (int x = 0; x <= getMaxX(); x++) {
             for (int y = 0; y <= getMaxY(); y++) {
                 for (int z = 0; z <= getMaxZ(); z++) {
@@ -73,9 +82,14 @@ public class DecayDungeon extends Dungeon {
                     CopyBlock.copyBlock(fromBlock, to.getBlock().getState());
                 }
             }
-            percentComplete += percentPerSlice;
-            DungeonMod.getPlugin().getLogger().log(Level.INFO, percentComplete * 100 + "% complete.");
+
+            if (blocksCopied - blocksCopiedAtLastReport > BLOCKS_PER_REPORT) {
+                DungeonMod.getPlugin().getLogger().log(Level.INFO, ((float) blocksCopied / blocksToCopy) * 100 + "% done.");
+                blocksCopiedAtLastReport = blocksCopied;
+            }
+            blocksCopied += blocksPerSlice;
         }
+
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Finished copying " + blocksToCopy + " blocks.");
     }
 }
