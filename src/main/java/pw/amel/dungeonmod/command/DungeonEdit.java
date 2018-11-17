@@ -19,6 +19,7 @@ public class DungeonEdit implements CommandExecutor {
             return false;
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
+            return true;
         }
         Player senderPlayer = (Player) sender;
         if (senderPlayer.getInventory().getHelmet() != null) {
