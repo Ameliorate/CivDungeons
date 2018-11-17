@@ -17,6 +17,15 @@ commands:
     usage: /dungeonreload [dungeon]
     permission: dungeonmod.reloaddungeon
     aliases: reloaddungeon
+  dungeonenter:
+    description: Enter a given dungeon.
+    usage: /dungeonenter [dungeon] {player}
+    permission: dungeonmod.commandenter
+    aliases: enterdungeon
+  dungeonexit:
+    description: Exit the dungeon you are currently in dungeon.
+    usage: /dungeonexit {player}
+
 
 permissions:
   dungeonmod.*:
@@ -24,7 +33,19 @@ permissions:
     children:
       dungeonmod.edit: true
       dungeonmod.reloaddungeon: true
+      dungeonmod.commandenter: true
+      dungeonmod.commandenter.other: true
+      dungeonmod.commandexit: true
+      dungeonmod.commandexit.other: true
   dungeonmod.edit:
     description: Allows editing any dungeon using the /dungeonedit command.
   dungeonmod.reloaddungeon:
     description: Allows reloading any DecayDungeon from its template using the /dungeonreload command.
+  dungeonmod.commandenter:
+    description: Allows entering a dungeon using commands.
+  dungeonmod.commandenter.other:
+    description: Allows teleporting another player into a dungeon.
+  dungeonmod.commandexit:
+    description: Allows exiting a dungeon using commands.
+  dungeonmod.commandexit.other:
+    description: Allows teleporting another player out of a dungeon.
