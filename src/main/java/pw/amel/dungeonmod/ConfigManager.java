@@ -22,42 +22,43 @@ public class ConfigManager {
 
         ConfigurationSection dungeonsSection = config.getConfigurationSection("dungeons");
 
-        for (String dungeon : dungeonsSection.getKeys(false)) {
-            String type = dungeonsSection.getString(dungeon + ".type", "DecayDungeon");
+        dungeonsSection.getValues(false).forEach((dungeon, v) -> {
+            ConfigurationSection dungeonConfig = (ConfigurationSection) v;
+            String type = dungeonConfig.getString("type", "DecayDungeon");
             if (!(type.equals("PersistentDungeon") || type.equals("DecayDungeon"))) {
-                DungeonMod.getPlugin().getLogger().log(Level.WARNING, "dungeons." + dungeon + ".type is neither" +
+                DungeonMod.getPlugin().getLogger().log(Level.WARNING, "dungeons." + "type is neither" +
                         " PersistentDungeon nor DecayDungeon. Defaulting to DecayDungeon.");
                 type = "DecayDungeon";
             }
 
-            float spawnX = (float) dungeonsSection.getDouble(dungeon + ".spawnX", 2);
-            float spawnY = (float) dungeonsSection.getDouble(dungeon + ".spawnY", 2);
-            float spawnZ = (float) dungeonsSection.getDouble(dungeon + ".spawnZ", 2);
+            float spawnX = (float) dungeonConfig.getDouble("spawnX", 2);
+            float spawnY = (float) dungeonConfig.getDouble("spawnY", 2);
+            float spawnZ = (float) dungeonConfig.getDouble("spawnZ", 2);
             Location dungeonSpawn = new Location(null, spawnX, spawnY, spawnZ);
 
-            float exitX = (float) dungeonsSection.getDouble(dungeon + ".exitX", 0);
-            float exitY = (float) dungeonsSection.getDouble(dungeon + ".exitY", 128);
-            float exitZ = (float) dungeonsSection.getDouble(dungeon + ".exitZ", 0);
-            String exitWorld = dungeonsSection.getString(dungeon + ".exitWorld", "world");
+            float exitX = (float) dungeonConfig.getDouble("exitX", 0);
+            float exitY = (float) dungeonConfig.getDouble("exitY", 128);
+            float exitZ = (float) dungeonConfig.getDouble("exitZ", 0);
+            String exitWorld = dungeonConfig.getString("exitWorld", "world");
 
-            int maxX = dungeonsSection.getInt(dungeon + ".maxX");
-            int maxY = dungeonsSection.getInt(dungeon + ".maxY");
-            int maxZ = dungeonsSection.getInt(dungeon + ".maxZ");
+            int maxX = dungeonConfig.getInt("maxX");
+            int maxY = dungeonConfig.getInt("maxY");
+            int maxZ = dungeonConfig.getInt("maxZ");
 
-            boolean generateBedrockBox = dungeonsSection.getBoolean(dungeon + ".generateBedrockBox", true);
+            boolean generateBedrockBox = dungeonConfig.getBoolean("generateBedrockBox", true);
 
             Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
 
             if (type.equals("PersistentDungeon")) {
                 dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon, generateBedrockBox, maxX, maxY, maxZ));
             } else if (type.equals("DecayDungeon")) {
-                int variance = dungeonsSection.getInt(dungeon + ".breakTimeVarianceSeconds", 10);
-                int avgTime = dungeonsSection.getInt(dungeon + ".breakAvgTimeSeconds", 10);
+                int variance = dungeonConfig.getInt("breakTimeVarianceSeconds", 10);
+                int avgTime = dungeonConfig.getInt("breakAvgTimeSeconds", 10);
 
                 dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon,
                         generateBedrockBox,variance * 20, avgTime * 20, maxX, maxY, maxZ));
             }
-        }
+        });
     }
 
     private static HashMap<String, Dungeon> dungeons = new HashMap<>();
