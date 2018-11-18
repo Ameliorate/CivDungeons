@@ -9,6 +9,7 @@ public class ConfigReload implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         ConfigManager.reload();
+        sender.sendMessage("Finished reloading.");
         return true;
     }
 }
