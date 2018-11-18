@@ -90,6 +90,8 @@ public abstract class PortalData {
                 (isEntry ? dungeon.getSpawnLocation() : dungeon.getExitLocation());
 
         cancelEvent = config.getBoolean("cancelEvent", false);
+
+        delaySeconds = (float) config.getDouble("delaySeconds", 0);
     }
 
     public Location getPoint2() {
@@ -120,11 +122,23 @@ public abstract class PortalData {
         return point1;
     }
 
+    public Float getDelaySeconds() {
+        return delaySeconds;
+    }
+
+    public void afterDelay(Runnable ranAfterDelaySeconds) {
+        if (delaySeconds != 0)
+            DungeonMod.getPlugin().getServer().getScheduler()
+                .runTaskLater(DungeonMod.getPlugin(), ranAfterDelaySeconds,(long) (delaySeconds * 20));
+        else
+            ranAfterDelaySeconds.run();
+    }
+
     private Location point1;
     private Location point2;
     private Location spawnPoint;
     private boolean isEntry;
     private boolean cancelEvent;
     private Dungeon dungeon;
-
+    private Float delaySeconds;
 }
