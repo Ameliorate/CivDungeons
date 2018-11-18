@@ -27,6 +27,7 @@ public abstract class Dungeon {
         DungeonMod.getPlugin().getServer().getPluginManager().registerEvents(new DungeonWorldBorder(this), DungeonMod.getPlugin());
     }
 
+
     protected World dungeonWorld;
 
     private Location spawnLocation;
@@ -45,6 +46,10 @@ public abstract class Dungeon {
 
     public int getMaxZ() {
         return maxZ;
+    }
+
+    public World getDungeonWorld() {
+        return dungeonWorld;
     }
 
     public Location getExitLocation() {
