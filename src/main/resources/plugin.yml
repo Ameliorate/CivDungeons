@@ -25,6 +25,8 @@ commands:
   dungeonexit:
     description: Exit the dungeon you are currently in dungeon.
     usage: /dungeonexit {player}
+    permission: dungeonmod.commandexit
+    aliases: exitdungeon
   dungeonconfigreload:
     description: Reload the config file from the filesystem.
     usage: /dungeonconfigreload
