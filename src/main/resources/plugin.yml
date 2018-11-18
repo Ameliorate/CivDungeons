@@ -25,6 +25,10 @@ commands:
   dungeonexit:
     description: Exit the dungeon you are currently in dungeon.
     usage: /dungeonexit {player}
+  dungeonconfigreload:
+    description: Reload the config file from the filesystem.
+    usage: /dungeonconfigreload
+    permission: dungeonmod.configreload
 
 
 permissions:
@@ -37,6 +41,7 @@ permissions:
       dungeonmod.commandenter.other: true
       dungeonmod.commandexit: true
       dungeonmod.commandexit.other: true
+      dungeonmod.configreload: true
   dungeonmod.edit:
     description: Allows editing any dungeon using the /dungeonedit command.
   dungeonmod.reloaddungeon:
@@ -49,3 +54,5 @@ permissions:
     description: Allows exiting a dungeon using commands.
   dungeonmod.commandexit.other:
     description: Allows teleporting another player out of a dungeon.
+  dungeonmod.configreload:
+    description: Allows reloading the config file.

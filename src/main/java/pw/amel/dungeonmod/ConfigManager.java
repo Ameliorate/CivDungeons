@@ -19,6 +19,9 @@ public class ConfigManager {
     private ConfigManager() {}
 
     public static void reload() {
+        portalConstructors.forEach((name, constructor) -> constructor.removeAllPortals());
+        dungeons.clear();
+
         DungeonMod.getPlugin().saveDefaultConfig();
         DungeonMod.getPlugin().reloadConfig();
         config = DungeonMod.getPlugin().getConfig();
@@ -106,8 +109,8 @@ public class ConfigManager {
         portalConstructors.put(type, constructor);
     }
 
-    @FunctionalInterface
     public interface PortalConstructor {
         void newPortal(ConfigurationSection config);
+        void removeAllPortals();
     }
 }

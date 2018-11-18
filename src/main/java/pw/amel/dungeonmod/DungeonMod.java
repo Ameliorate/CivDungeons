@@ -24,6 +24,7 @@ public class DungeonMod extends JavaPlugin {
         getCommand("dungeonedit").setExecutor(new DungeonEdit());
         getCommand("dungeonenter").setExecutor(new DungeonEnter());
         getCommand("dungeonexit").setExecutor(new DungeonExit());
+        getCommand("dungeonconfigreload").setExecutor(new ConfigReload());
 
         getServer().getPluginManager().registerEvents(new ConstructionHelmetTeleport(), this);
         BlockInteractPortal blockInteractPortal = new BlockInteractPortal();

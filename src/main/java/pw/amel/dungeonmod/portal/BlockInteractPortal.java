@@ -16,8 +16,12 @@ import java.util.ArrayList;
 public class BlockInteractPortal implements Listener, ConfigManager.PortalConstructor {
     @Override
     public void newPortal(ConfigurationSection config) {
-
         portals.add(new BlockPortal(config));
+    }
+
+    @Override
+    public void removeAllPortals() {
+        portals.clear();
     }
 
     private ArrayList<BlockPortal> portals = new ArrayList<>();
