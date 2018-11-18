@@ -31,7 +31,6 @@ public class DungeonExit implements CommandExecutor {
         }
 
         String dungeonName = player.getWorld().getName();
-        System.out.println(dungeonName);
         Dungeon dungeon = ConfigManager.getDungeon(dungeonName);
         if (dungeon == null) {
             sender.sendMessage(ChatColor.RED + "Dungeon not found.");
