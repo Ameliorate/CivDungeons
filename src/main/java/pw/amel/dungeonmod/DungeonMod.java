@@ -1,11 +1,13 @@
 package pw.amel.dungeonmod;
 
+import org.bukkit.Location;
 import pw.amel.dungeonmod.blockcopy.CopyBlock;
 import pw.amel.dungeonmod.blockcopy.InventoryCopier;
 import pw.amel.dungeonmod.blockcopy.MetaCopier;
 import pw.amel.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
 import pw.amel.dungeonmod.command.*;
+import pw.amel.dungeonmod.portal.BlockInteractPortal;
 
 public class DungeonMod extends JavaPlugin {
     private static DungeonMod plugin;
@@ -22,7 +24,12 @@ public class DungeonMod extends JavaPlugin {
         getCommand("dungeonedit").setExecutor(new DungeonEdit());
         getCommand("dungeonenter").setExecutor(new DungeonEnter());
         getCommand("dungeonexit").setExecutor(new DungeonExit());
+
         getServer().getPluginManager().registerEvents(new ConstructionHelmetTeleport(), this);
+        BlockInteractPortal blockInteractPortal = new BlockInteractPortal();
+        getServer().getPluginManager().registerEvents(blockInteractPortal, this);
+
+        ConfigManager.addPortalConstructor("BlockInteract", blockInteractPortal);
 
         ConfigManager.reload();
     }

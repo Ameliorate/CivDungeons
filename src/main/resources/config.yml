@@ -26,3 +26,20 @@ dungeons:
     maxZ: 9
     exitWorld: world_the_end
     generateBedrockBox: false
+
+portals:
+  testdungeon1:
+    type: BlockInteract
+    entryOrExit: entry
+    rightclick: false
+    leftclick: true
+    material: STONE
+    cancelEvent: true
+    x1: 0
+    y1: 32
+    z1: 0
+    x2: 16
+    y2: 48
+    z2: 16
+    world: world
+    dungeon: testdungeon
