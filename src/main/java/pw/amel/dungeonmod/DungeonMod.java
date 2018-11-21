@@ -7,6 +7,7 @@ import pw.amel.dungeonmod.blockcopy.MetaCopier;
 import pw.amel.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
 import pw.amel.dungeonmod.command.*;
+import pw.amel.dungeonmod.portal.BlockBreakPortal;
 import pw.amel.dungeonmod.portal.BlockInteractPortal;
 
 public class DungeonMod extends JavaPlugin {
@@ -29,8 +30,11 @@ public class DungeonMod extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ConstructionHelmetTeleport(), this);
         BlockInteractPortal blockInteractPortal = new BlockInteractPortal();
         getServer().getPluginManager().registerEvents(blockInteractPortal, this);
+        BlockBreakPortal blockBreakPortal = new BlockBreakPortal();
+        getServer().getPluginManager().registerEvents(blockBreakPortal, this);
 
         ConfigManager.addPortalConstructor("BlockInteract", blockInteractPortal);
+        ConfigManager.addPortalConstructor("BlockBreak", blockBreakPortal);
 
         ConfigManager.reload();
     }
