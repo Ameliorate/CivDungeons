@@ -4,11 +4,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import pw.amel.dungeonmod.ConfigManager;
-import pw.amel.dungeonmod.DungeonMod;
 
 import java.util.ArrayList;
 
@@ -30,7 +28,7 @@ public class BlockBreakPortal implements Listener, ConfigManager.PortalConstruct
         for (BlockPortal portal : portals) {
             Location checkLocation = event.getBlock().getLocation();
 
-            if (!DungeonMod.isInArea(checkLocation, portal.getPoint1(), portal.getPoint2()))
+            if (!portal.isInArea(checkLocation))
                 continue;
 
             Material clickedMaterial = event.getBlock().getType();
