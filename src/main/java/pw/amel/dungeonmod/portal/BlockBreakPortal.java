@@ -25,7 +25,7 @@ public class BlockBreakPortal implements Listener, ConfigManager.PortalConstruct
 
     private ArrayList<BlockPortal> portals = new ArrayList<>();
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true)
     private void blockBreakEvent(BlockBreakEvent event) {
         for (BlockPortal portal : portals) {
             Location checkLocation = event.getBlock().getLocation();

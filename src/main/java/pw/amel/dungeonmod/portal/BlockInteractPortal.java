@@ -26,7 +26,7 @@ public class BlockInteractPortal implements Listener, ConfigManager.PortalConstr
 
     private ArrayList<BlockPortal> portals = new ArrayList<>();
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true)
     private void playerInteractEvent(PlayerInteractEvent event) {
         for (BlockPortal portal : portals) {
             if (!portal.physicalTrigger && event.getAction() == Action.PHYSICAL)

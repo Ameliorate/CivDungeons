@@ -16,7 +16,7 @@ public class DungeonWorldBorder implements Listener {
 
     private Dungeon dungeon;
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         Location playerLocation = event.getPlayer().getLocation();
 
