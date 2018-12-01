@@ -50,9 +50,7 @@ public class BlockInteractPortal implements Listener, ConfigManager.PortalConstr
                 clickedMaterial = checkLocation.getBlock().getType();
 
             if (clickedMaterial == portal.material) {
-                portal.afterDelay(() -> event.getPlayer().teleport(portal.getSpawnPoint()));
-                if (portal.shouldCancelEvent())
-                    event.setCancelled(true);
+                portal.trigger(event.getPlayer(), event);
                 break;
             }
         }

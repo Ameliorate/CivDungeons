@@ -34,9 +34,7 @@ public class BlockBreakPortal implements Listener, ConfigManager.PortalConstruct
             Material clickedMaterial = event.getBlock().getType();
 
             if (clickedMaterial == portal.material) {
-                portal.afterDelay(() -> event.getPlayer().teleport(portal.getSpawnPoint()));
-                if (portal.shouldCancelEvent())
-                    event.setCancelled(true);
+                portal.trigger(event.getPlayer(), event);
                 break;
             }
         }

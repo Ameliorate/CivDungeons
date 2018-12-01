@@ -51,9 +51,7 @@ public class PlayerMovePortal implements Listener, ConfigManager.PortalConstruct
             if (moveInside && !portal.triggerMoveInside)
                 continue;
 
-            portal.afterDelay(() -> event.getPlayer().teleport(portal.getSpawnPoint()));
-            if (portal.shouldCancelEvent())
-                event.setCancelled(true);
+            portal.trigger(event.getPlayer(), event);
             break;
         }
     }

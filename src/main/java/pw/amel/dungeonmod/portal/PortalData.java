@@ -3,6 +3,8 @@ package pw.amel.dungeonmod.portal;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import pw.amel.dungeonmod.ConfigManager;
 import pw.amel.dungeonmod.Dungeon;
 import pw.amel.dungeonmod.DungeonMod;
@@ -191,6 +193,17 @@ public abstract class PortalData {
                 .runTaskLater(DungeonMod.getPlugin(), ranAfterDelaySeconds,(long) (delaySeconds * 20));
         else
             ranAfterDelaySeconds.run();
+    }
+
+    /**
+     * Sends the player through the portal, using the proper delay and other effects as specified in the config.
+     * @param player The player that is going through the portal, or has "triggered" this portal.
+     * @param event The event that resulted in the triggering of this portal.
+     */
+    public void trigger(Player player, Cancellable event) {
+        afterDelay(() -> player.teleport(getSpawnPoint()));
+        if (shouldCancelEvent())
+            event.setCancelled(true);
     }
 
     private Location point1;
