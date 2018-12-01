@@ -135,22 +135,16 @@ class DecayListener implements Listener {
         int delay = semiDelay + avgTime;
 
         BlockState placedCopy = placed.getState();
-        Collection<ItemStack> drops = placed.getDrops();
 
         DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
-            if (placedCopy.getBlock().getType() == Material.AIR) {
+            if (placed.getLocation().getBlock().getType() == Material.AIR) {
                 return;
             }
 
-            placedCopy.getWorld().playEffect(placed.getLocation(), Effect.STEP_SOUND, placedCopy.getType(), 10);
-            placedCopy.setType(Material.AIR);
-            placedCopy.update(true);
+            placed.breakNaturally(null); // break with an empty hand
+            placed.getWorld().playEffect(placed.getLocation(), Effect.STEP_SOUND, placedCopy.getType(), 10);
 
-            for (ItemStack drop : drops) {
-                placedCopy.getWorld().dropItemNaturally(placedCopy.getLocation(), drop);
-            }
-
-            blockLock.remove(placedCopy.getLocation());
+            blockLock.remove(placed.getLocation());
         }, delay);
     }
 
