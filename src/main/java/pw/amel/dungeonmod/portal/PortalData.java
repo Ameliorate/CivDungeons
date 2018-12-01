@@ -11,6 +11,36 @@ import java.util.logging.Level;
 
 public abstract class PortalData {
     public PortalData(ConfigurationSection config) {
+        doEntryExit(config);
+        doDungeon(config);
+        doLocation(config);
+        doSpawn(config);
+
+        cancelEvent = config.getBoolean("cancelEvent", false);
+        delaySeconds = (float) config.getDouble("delaySeconds", 0);
+    }
+
+    private void doEntryExit(ConfigurationSection config) {
+        String entryOrExit = config.getString("entryOrExit", "entry");
+        if ((!entryOrExit.equals("entry")) && (!entryOrExit.equals("exit"))) {
+            DungeonMod.getPlugin().getLogger().log(Level.WARNING, config.getCurrentPath() +
+                    ".entryOrExit is not 'entry' or 'exit'. Defaulting to entry.");
+            entryOrExit = "entry";
+        }
+        isEntry = entryOrExit.equals("entry");
+    }
+
+    private void doDungeon(ConfigurationSection config) {
+        String dungeonName = config.getString("dungeon");
+        dungeon = ConfigManager.getDungeon(dungeonName);
+        if (dungeon == null) {
+            DungeonMod.getPlugin().getLogger().log(Level.SEVERE, config.getCurrentPath() +
+                    ".dungeon is not a valid dungeon.");
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private void doLocation(ConfigurationSection config) {
         int x1 = config.getInt("x1");
         int y1 = config.getInt("y1");
         int z1 = config.getInt("z1");
@@ -27,29 +57,13 @@ public abstract class PortalData {
 
         String worldName = config.getString("world");
 
-        String dungeonName = config.getString("dungeon");
-        dungeon = ConfigManager.getDungeon(dungeonName);
-        if (dungeon == null) {
-            DungeonMod.getPlugin().getLogger().log(Level.SEVERE, config.getCurrentPath() +
-                    ".dungeon is not a valid dungeon.");
-            throw new IllegalArgumentException();
-        }
-
-        String entryOrExit = config.getString("entryOrExit", "entry");
-        if ((!entryOrExit.equals("entry")) && (!entryOrExit.equals("exit"))) {
-            DungeonMod.getPlugin().getLogger().log(Level.WARNING, config.getCurrentPath() +
-                    ".entryOrExit is not 'entry' or 'exit'. Defaulting to entry.");
-            entryOrExit = "entry";
-        }
-        isEntry = entryOrExit.equals("entry");
-
-        if (worldName != null && !isEntry) {
+        if (worldName != null && isExit()) {
             DungeonMod.getPlugin().getLogger().log(Level.WARNING, config.getCurrentPath() +
                     ".world and .dungeon are both defined and .entryOrExit is 'exit'. Is this a mistake? Defaulting to .dungeon");
         }
 
         World world;
-        if (worldName != null && isEntry) {
+        if (worldName != null && isEntry()) {
             world = DungeonMod.getPlugin().getServer().getWorld(worldName);
             if (world == null) {
                 DungeonMod.getPlugin().getLogger().log(Level.SEVERE, config.getCurrentPath() +
@@ -62,17 +76,27 @@ public abstract class PortalData {
 
         point1 = new Location(world, x1, y1, z1);
         point2 = new Location(world, x2, y2, z2);
+    }
 
+    private void doSpawn(ConfigurationSection config) {
         int spawnX = config.getInt("spawnX", Integer.MAX_VALUE);
         int spawnY = config.getInt("spawnY", Integer.MAX_VALUE);
         int spawnZ = config.getInt("spawnZ", Integer.MAX_VALUE);
         String spawnWorldName = config.getString("spawnWorld");
 
         boolean warn = true;
+
+        if (spawnWorldName != null && isEntry()) {
+            DungeonMod.getPlugin().getLogger().log(Level.WARNING, config.getCurrentPath() +
+                    ".spawnWorld is defined and .entryOrExit is 'entry'. Is this a mistake? Defaulting to .dungeon.");
+            spawnWorldName = null;
+        }
+
         boolean useDungeonSpawnExit = false;
         if (spawnX == Integer.MAX_VALUE && spawnY == Integer.MAX_VALUE && spawnZ == Integer.MAX_VALUE && spawnWorldName == null) {
             warn = false;
         }
+
         if (spawnX == Integer.MAX_VALUE || spawnY == Integer.MAX_VALUE || spawnZ == Integer.MAX_VALUE || spawnWorldName == null) {
             if (warn) {
                 DungeonMod.getPlugin().getLogger().log(Level.WARNING, config.getCurrentPath() +
@@ -86,12 +110,10 @@ public abstract class PortalData {
         if (!useDungeonSpawnExit)
             spawnWorld = DungeonMod.getPlugin().getServer().getWorld(spawnWorldName);
 
-        spawnPoint = !useDungeonSpawnExit ? new Location(spawnWorld, spawnX, spawnY, spawnZ) :
-                (isEntry ? dungeon.getSpawnLocation() : dungeon.getExitLocation());
-
-        cancelEvent = config.getBoolean("cancelEvent", false);
-
-        delaySeconds = (float) config.getDouble("delaySeconds", 0);
+        if (useDungeonSpawnExit)
+            spawnPoint = isEntry ? dungeon.getSpawnLocation() : dungeon.getExitLocation();
+        else
+            spawnPoint = new Location(spawnWorld, spawnX, spawnY, spawnZ);
     }
 
     /**
