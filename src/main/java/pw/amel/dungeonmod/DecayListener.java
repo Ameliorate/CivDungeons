@@ -50,7 +50,7 @@ class DecayListener implements Listener {
 
         int semiDelay = new Random().nextInt(variance) - (variance / 2);
         int delay = semiDelay + avgTime;
-        final BlockState dest = broken.getState();  // Array to get around lambda issues.
+        final Block dest = broken;
 
         DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
             Block template =

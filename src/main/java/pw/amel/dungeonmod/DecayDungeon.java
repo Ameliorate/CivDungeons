@@ -79,7 +79,7 @@ public class DecayDungeon extends Dungeon {
                     Location fromLoc = new Location(dungeonWorld, x - getMaxX() - 1, y, z);
                     Block fromBlock = fromLoc.getBlock();
                     Location to = new Location(dungeonWorld, x, y, z);
-                    CopyBlock.copyBlock(fromBlock, to.getBlock().getState());
+                    CopyBlock.copyBlock(fromBlock, to.getBlock());
                 }
             }
 

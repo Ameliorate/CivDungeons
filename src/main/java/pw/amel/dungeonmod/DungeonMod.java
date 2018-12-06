@@ -1,9 +1,5 @@
 package pw.amel.dungeonmod;
 
-import pw.amel.dungeonmod.blockcopy.CopyBlock;
-import pw.amel.dungeonmod.blockcopy.InventoryCopier;
-import pw.amel.dungeonmod.blockcopy.MetaCopier;
-import pw.amel.dungeonmod.blockcopy.TypeCopier;
 import org.bukkit.plugin.java.JavaPlugin;
 import pw.amel.dungeonmod.command.*;
 import pw.amel.dungeonmod.portal.BlockBreakPortal;
@@ -16,10 +12,6 @@ public class DungeonMod extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-
-        CopyBlock.addBlockCopier(new TypeCopier(), 1);
-        CopyBlock.addBlockCopier(new MetaCopier(), 2);
-        CopyBlock.addBlockCopier(new InventoryCopier(), 3);
 
         getCommand("dungeonreload").setExecutor(new DungeonReload());
         getCommand("dungeonedit").setExecutor(new DungeonEdit());
