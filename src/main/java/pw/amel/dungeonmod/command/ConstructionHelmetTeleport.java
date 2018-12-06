@@ -15,6 +15,8 @@ import pw.amel.dungeonmod.Dungeon;
 public class ConstructionHelmetTeleport implements Listener {
     @EventHandler(ignoreCancelled = true)
     private void onInventoryClickEvent(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null)
+            return;
         if (event.getCurrentItem().getType() != Material.GOLD_HELMET)
             return;
         InventoryAction click = event.getAction();
