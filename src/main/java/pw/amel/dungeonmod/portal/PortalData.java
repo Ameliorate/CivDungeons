@@ -5,7 +5,6 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import pw.amel.dungeonmod.ConfigManager;
 import pw.amel.dungeonmod.Dungeon;
 import pw.amel.dungeonmod.DungeonMod;
 
@@ -34,7 +33,7 @@ public abstract class PortalData {
 
     private void doDungeon(ConfigurationSection config) {
         String dungeonName = config.getString("dungeon");
-        dungeon = ConfigManager.getDungeon(dungeonName);
+        dungeon = DungeonMod.getConfigManager().getDungeon(dungeonName);
         if (dungeon == null) {
             DungeonMod.getPlugin().getLogger().log(Level.SEVERE, config.getCurrentPath() +
                     ".dungeon is not a valid dungeon.");

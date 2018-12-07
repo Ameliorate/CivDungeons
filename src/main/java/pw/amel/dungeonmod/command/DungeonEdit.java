@@ -29,7 +29,7 @@ public class DungeonEdit implements CommandExecutor {
         }
 
         String dungeonName = args[0];
-        Dungeon dungeon = ConfigManager.getDungeon(dungeonName);
+        Dungeon dungeon = DungeonMod.getConfigManager().getDungeon(dungeonName);
         if (dungeon == null) {
             sender.sendMessage(ChatColor.RED + "Please enter a valid dungeon.");
             return true;

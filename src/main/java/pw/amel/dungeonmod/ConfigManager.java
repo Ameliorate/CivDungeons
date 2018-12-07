@@ -1,36 +1,30 @@
 package pw.amel.dungeonmod;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 
 /**
  * Parses the config to a convent getter interface.
  */
 public class ConfigManager {
-    private static FileConfiguration config;
-
-    private ConfigManager() {}
-
-    public static void reload() {
+    public void reload() {
         portalConstructors.forEach((name, constructor) -> constructor.removeAllPortals());
         dungeons.clear();
 
         DungeonMod.getPlugin().saveDefaultConfig();
         DungeonMod.getPlugin().reloadConfig();
-        config = DungeonMod.getPlugin().getConfig();
+
+        FileConfiguration config = DungeonMod.getPlugin().getConfig();
 
         doDungeonsSection(config);
         doPortalsSection(config);
     }
 
-    private static void doDungeonsSection(ConfigurationSection config) {
+    private void doDungeonsSection(ConfigurationSection config) {
         ConfigurationSection dungeonsSection = config.getConfigurationSection("dungeons");
         dungeonsSection.getValues(false).forEach((dungeon, v) -> {
             ConfigurationSection dungeonConfig = (ConfigurationSection) v;
@@ -71,7 +65,7 @@ public class ConfigManager {
         });
     }
 
-    private static void doPortalsSection(ConfigurationSection rootConfig) {
+    private void doPortalsSection(ConfigurationSection rootConfig) {
         ConfigurationSection portalsSection = rootConfig.getConfigurationSection("portals");
         portalsSection.getValues(false).forEach((name, v) -> {
             ConfigurationSection config = (ConfigurationSection) v;
@@ -94,18 +88,18 @@ public class ConfigManager {
         });
     }
 
-    private static HashMap<String, PortalConstructor> portalConstructors = new HashMap<>();
+    private HashMap<String, PortalConstructor> portalConstructors = new HashMap<>();
 
-    private static HashMap<String, Dungeon> dungeons = new HashMap<>();
+    private HashMap<String, Dungeon> dungeons = new HashMap<>();
 
-    public static Dungeon getDungeon(String name) {
+    public Dungeon getDungeon(String name) {
         if (name == null)
             return null;
         name = name.replaceAll("^dungeon_", "");
         return dungeons.get(name);
     }
 
-    public static void addPortalConstructor(String type, PortalConstructor constructor) {
+    public void addPortalConstructor(String type, PortalConstructor constructor) {
         portalConstructors.put(type, constructor);
     }
 

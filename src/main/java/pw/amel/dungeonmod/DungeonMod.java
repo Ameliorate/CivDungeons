@@ -8,6 +8,7 @@ import pw.amel.dungeonmod.portal.PlayerMovePortal;
 
 public class DungeonMod extends JavaPlugin {
     private static DungeonMod plugin;
+    private static ConfigManager configManager;
 
     @Override
     public void onEnable() {
@@ -27,14 +28,20 @@ public class DungeonMod extends JavaPlugin {
         PlayerMovePortal playerMovePortal = new PlayerMovePortal();
         getServer().getPluginManager().registerEvents(playerMovePortal, this);
 
-        ConfigManager.addPortalConstructor("BlockInteract", blockInteractPortal);
-        ConfigManager.addPortalConstructor("BlockBreak", blockBreakPortal);
-        ConfigManager.addPortalConstructor("PlayerMove", playerMovePortal);
+        configManager = new ConfigManager();
 
-        ConfigManager.reload();
+        configManager.addPortalConstructor("BlockInteract", blockInteractPortal);
+        configManager.addPortalConstructor("BlockBreak", blockBreakPortal);
+        configManager.addPortalConstructor("PlayerMove", playerMovePortal);
+
+        configManager.reload();
     }
 
     public static DungeonMod getPlugin() {
         return plugin;
+    }
+
+    public static ConfigManager getConfigManager() {
+        return configManager;
     }
 }

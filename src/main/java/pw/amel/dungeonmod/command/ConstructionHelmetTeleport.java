@@ -4,13 +4,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import pw.amel.dungeonmod.ConfigManager;
 import pw.amel.dungeonmod.Dungeon;
+import pw.amel.dungeonmod.DungeonMod;
 
 public class ConstructionHelmetTeleport implements Listener {
     @EventHandler(ignoreCancelled = true)
@@ -33,7 +32,7 @@ public class ConstructionHelmetTeleport implements Listener {
         player.updateInventory();
 
         String worldName = player.getLocation().getWorld().getName();
-        Dungeon dungeon = ConfigManager.getDungeon(worldName);
+        Dungeon dungeon = DungeonMod.getConfigManager().getDungeon(worldName);
         if (dungeon == null)
             return;
         dungeon.teleportPlayerToExit(player);

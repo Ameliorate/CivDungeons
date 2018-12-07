@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import pw.amel.dungeonmod.ConfigManager;
 import pw.amel.dungeonmod.Dungeon;
 import pw.amel.dungeonmod.DungeonMod;
 
@@ -29,7 +28,7 @@ public class DungeonEnter implements CommandExecutor {
         if (player == null) {
             sender.sendMessage(ChatColor.RED + "Player not found.`");
         }
-        Dungeon dungeon = ConfigManager.getDungeon(dungeonName);
+        Dungeon dungeon = DungeonMod.getConfigManager().getDungeon(dungeonName);
         if (dungeon == null) {
             sender.sendMessage(ChatColor.RED + "Dungeon not found.");
             return true;
