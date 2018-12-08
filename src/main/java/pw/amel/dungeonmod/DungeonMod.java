@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import pw.amel.dungeonmod.command.*;
 import pw.amel.dungeonmod.portal.BlockBreakPortal;
 import pw.amel.dungeonmod.portal.BlockInteractPortal;
+import pw.amel.dungeonmod.portal.EntityDamagePortal;
 import pw.amel.dungeonmod.portal.PlayerMovePortal;
 
 public class DungeonMod extends JavaPlugin {
@@ -27,12 +28,15 @@ public class DungeonMod extends JavaPlugin {
         getServer().getPluginManager().registerEvents(blockBreakPortal, this);
         PlayerMovePortal playerMovePortal = new PlayerMovePortal();
         getServer().getPluginManager().registerEvents(playerMovePortal, this);
+        EntityDamagePortal entityDamagePortal = new EntityDamagePortal();
+        getServer().getPluginManager().registerEvents(entityDamagePortal, this);
 
         configManager = new ConfigManager();
 
         configManager.addPortalConstructor("BlockInteract", blockInteractPortal);
         configManager.addPortalConstructor("BlockBreak", blockBreakPortal);
         configManager.addPortalConstructor("PlayerMove", playerMovePortal);
+        configManager.addPortalConstructor("EntityDamage", entityDamagePortal);
 
         configManager.reload();
     }
