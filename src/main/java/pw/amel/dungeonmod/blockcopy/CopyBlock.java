@@ -5,7 +5,11 @@ import net.minecraft.server.v1_12_R1.TileEntity;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.InventoryHolder;
+import pw.amel.dungeonmod.DungeonMod;
+
+import java.util.logging.Level;
 
 /**
  * Static class to copy blocks from a template.
@@ -35,7 +39,13 @@ public class CopyBlock {
         BlockState toState = to.getState();
 
         if (fromState instanceof InventoryHolder) {
-            ((InventoryHolder) toState).getInventory().setContents(((InventoryHolder) fromState).getInventory().getContents());
+            InventoryHolder fromHolder = (InventoryHolder) fromState;
+            if (fromHolder.getInventory() instanceof DoubleChestInventory) {
+                DungeonMod.getPlugin().getLogger().log(Level.WARNING, "Double Chests don't work with dungeon mod. " +
+                        "Chest @ " + fromState.getLocation());
+            } else {
+                ((InventoryHolder) toState).getInventory().setContents(((InventoryHolder) fromState).getInventory().getContents());
+            }
         }
     }
 }
