@@ -222,12 +222,12 @@ class DecayListener implements Listener {
         }, delay);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         handleBlockPlace(event.getBlock());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBucketPlace(PlayerBucketEmptyEvent event) {
         Location clicked = event.getBlockClicked().getLocation();
         BlockFace face = event.getBlockFace();
