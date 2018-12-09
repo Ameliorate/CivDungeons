@@ -8,6 +8,7 @@ if [ -d "$gitroot/testserver" ]; then
   exit
 fi
 
+mvn package
 mkdir "$gitroot/testserver"
 wget -O "$gitroot/testserver/BuildTools.jar" https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 git config --global --unset core.autocrlf
@@ -15,3 +16,5 @@ cd "$gitroot/testserver" # cd into testserver to work around buildtools placing 
                          # the dir buildtools is in.
 java -jar "$gitroot/testserver/BuildTools.jar" -rev 1.12.2
 cd "$currentdir"
+mkdir "$gitroot/testserver/plugins"
+ln -s "$gitroot/target/DungeonMod.jar" "$gitroot/testserver/plugins/DungeonMod.jar"
