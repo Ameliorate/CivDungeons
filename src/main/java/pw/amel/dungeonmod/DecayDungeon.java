@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import pw.amel.dungeonmod.blockcopy.CopyBlock;
 
 import java.util.logging.Level;
@@ -15,7 +16,14 @@ public class DecayDungeon extends Dungeon {
                         int avgTime, int variance,
                         int maxX, int maxY, int maxZ) {
         super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
-        new DecayListener(this, avgTime, variance, getMaxX());
+
+        Plugin maybeCitadel = DungeonMod.getPlugin().getServer().getPluginManager().getPlugin("Citadel");
+        boolean citadelInstalled = maybeCitadel != null;
+        DungeonMod.getPlugin().getServer().getPluginManager().registerEvents(
+                citadelInstalled ? new CitadelDecayListener(this, avgTime, variance, getMaxX()) :
+                        new DecayListener(this, avgTime, variance, getMaxX()),
+                DungeonMod.getPlugin());
+
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
             if (generateBedrockBox) {

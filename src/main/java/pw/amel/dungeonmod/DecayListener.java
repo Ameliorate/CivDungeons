@@ -3,6 +3,7 @@ package pw.amel.dungeonmod;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.plugin.Plugin;
 import pw.amel.dungeonmod.blockcopy.CopyBlock;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -14,6 +15,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import vg.civcraft.mc.citadel.Citadel;
+import vg.civcraft.mc.citadel.ReinforcementManager;
+import vg.civcraft.mc.citadel.reinforcement.Reinforcement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +31,6 @@ class DecayListener implements Listener {
         this.variance = variance;
         this.blockOffset = blockOffset;
 
-        DungeonMod.getPlugin().getServer().getPluginManager().registerEvents(this, DungeonMod.getPlugin());
     }
 
     private Dungeon dungeon;
@@ -37,7 +40,7 @@ class DecayListener implements Listener {
 
     private HashMap<Location, Boolean> blockLockSilent = new HashMap<>();
 
-    private void handleBlockBreak(Block broken, boolean silent) {
+    public void handleBlockBreak(Block broken, boolean silent) {
         if (broken.getLocation().getWorld() != dungeon.dungeonWorld) {
             return;
         } else if (blockLockSilent.get(broken.getLocation()) != null) {
@@ -55,9 +58,18 @@ class DecayListener implements Listener {
         final Block dest = broken;
 
         DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
+            Plugin citadel = DungeonMod.getPlugin().getServer().getPluginManager().getPlugin("Citadel");
+            if (citadel != null) {
+                ReinforcementManager manager = Citadel.getReinforcementManager();
+                Reinforcement reinforcement = manager.getReinforcement(dest);
+                if (reinforcement != null) {
+                    manager.deleteReinforcement(reinforcement);
+                }
+            }
+
             Block template =
                     new Location(dungeon.dungeonWorld, broken.getX() - blockOffset - 1, broken.getY(), broken.getZ())
-                    .getBlock();
+                            .getBlock();
 
             boolean loud = !blockLockSilent.get(broken.getLocation()) ||
                     dest.getLocation().getBlock().getType() == Material.AIR;
@@ -220,7 +232,7 @@ class DecayListener implements Listener {
         // causing it to be handled as a "break" rather than a "place".
     }
 
-    private void handleBlockPlace(Block placed) {
+    public void handleBlockPlace(Block placed) {
         if (placed.getLocation().getWorld() != dungeon.dungeonWorld) {
             return;
         } else if (blockLockSilent.get(placed.getLocation()) != null) {
@@ -234,15 +246,21 @@ class DecayListener implements Listener {
         int semiDelay = ThreadLocalRandom.current().nextInt(-variance, variance);
         int delay = semiDelay + avgTime;
 
-        BlockState placedCopy = placed.getState();
-
         DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
+            Plugin citadel = DungeonMod.getPlugin().getServer().getPluginManager().getPlugin("Citadel");
+            if (citadel != null) {
+                ReinforcementManager manager = Citadel.getReinforcementManager();
+                Reinforcement reinforcement = manager.getReinforcement(placed);
+                if (reinforcement != null)
+                    manager.deleteReinforcement(reinforcement);
+            }
+
             if (placed.getLocation().getBlock().getType() == Material.AIR) {
                 return;
             }
 
             placed.breakNaturally(null); // break with an empty hand
-            placed.getWorld().playEffect(placed.getLocation(), Effect.STEP_SOUND, placedCopy.getType(), 10);
+            placed.getWorld().playEffect(placed.getLocation(), Effect.STEP_SOUND, placed.getType(), 10);
 
             blockLockSilent.remove(placed.getLocation());
         }, delay);
