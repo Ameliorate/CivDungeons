@@ -133,6 +133,8 @@ class DecayListener implements Listener {
             return;
         } else if (event.getInventory().getName().equals("container.inventory")) {
             return;
+        } else if (event.getInventory().getLocation() == null) {
+            return;
         }
 
         handleBlockBreak(event.getInventory().getLocation().getBlock(), false);
@@ -148,16 +150,40 @@ class DecayListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getInventory() == null) {
+            return;
+        } else if (event.getInventory().getName().equals("container.inventory")) {
+            return;
+        } else if (event.getInventory().getLocation() == null) {
+            return;
+        }
+
         handleBlockBreak(event.getInventory().getLocation().getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClose(InventoryCloseEvent event) {
+        if (event.getInventory() == null) {
+            return;
+        } else if (event.getInventory().getName().equals("container.inventory")) {
+            return;
+        } else if (event.getInventory().getLocation() == null) {
+            return;
+        }
+
         handleBlockBreak(event.getInventory().getLocation().getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
+        if (event.getInventory() == null) {
+            return;
+        } else if (event.getInventory().getName().equals("container.inventory")) {
+            return;
+        } else if (event.getInventory().getLocation() == null) {
+            return;
+        }
+
         handleBlockBreak(event.getInventory().getLocation().getBlock(), false);
     }
 
