@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class CopyBlock {
     @SuppressWarnings("deprecation")
     public static void copyBlock(Block from, Block to) {
-        to.setTypeIdAndData(from.getTypeId(), from.getData(), false);
+        to.setTypeIdAndData(from.getTypeId(), from.getData(), true);
         CraftWorld cw = (CraftWorld) from.getWorld();
         TileEntity teFrom = cw.getTileEntityAt(from.getX(), from.getY(), from.getZ());
         TileEntity teTo = cw.getTileEntityAt(to.getX(), to.getY(), to.getZ());
