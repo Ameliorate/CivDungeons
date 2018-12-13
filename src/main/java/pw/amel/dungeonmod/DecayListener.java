@@ -259,8 +259,8 @@ class DecayListener implements Listener {
                 return;
             }
 
-            placed.breakNaturally(null); // break with an empty hand
             placed.getWorld().playEffect(placed.getLocation(), Effect.STEP_SOUND, placed.getType(), 10);
+            placed.breakNaturally(null); // break with an empty hand
 
             blockLockSilent.remove(placed.getLocation());
         }, delay);
