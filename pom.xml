@@ -4,7 +4,7 @@
 
   <groupId>pw.amel</groupId>
   <artifactId>DungeonMod</artifactId>
-  <version>2.6.1</version>
+  <version>2.7.0</version>
   <packaging>jar</packaging>
 
   <name>DungeonMod</name>

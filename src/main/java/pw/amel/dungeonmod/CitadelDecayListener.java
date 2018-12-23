@@ -10,7 +10,7 @@ import vg.civcraft.mc.citadel.events.ReinforcementDamageEvent;
 public class CitadelDecayListener implements Listener {
     private DecayListener decayListener;
 
-    CitadelDecayListener(Dungeon dungeon, int avgTime, int variance, int blockOffset) {
+    CitadelDecayListener(DecayDungeon dungeon, int avgTime, int variance, int blockOffset) {
         decayListener = new DecayListener(dungeon, avgTime, variance, blockOffset);
         DungeonMod.getPlugin().getServer().getPluginManager().registerEvents(decayListener, DungeonMod.getPlugin());
     }

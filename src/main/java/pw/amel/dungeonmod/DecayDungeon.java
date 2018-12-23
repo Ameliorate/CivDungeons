@@ -3,10 +3,15 @@ package pw.amel.dungeonmod;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import pw.amel.dungeonmod.blockcopy.CopyBlock;
+import pw.amel.dungeonmod.blockcopy.CopyThing;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Level;
 
 
@@ -87,7 +92,7 @@ public class DecayDungeon extends Dungeon {
                     Location fromLoc = new Location(dungeonWorld, x - getMaxX() - 1, y, z);
                     Block fromBlock = fromLoc.getBlock();
                     Location to = new Location(dungeonWorld, x, y, z);
-                    CopyBlock.copyBlock(fromBlock, to.getBlock());
+                    CopyThing.copyBlock(fromBlock, to.getBlock());
                 }
             }
 
@@ -99,5 +104,51 @@ public class DecayDungeon extends Dungeon {
         }
 
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Finished copying " + blocksToCopy + " blocks.");
+
+        clonesToTemplates.clear();
+        killAllEntitiesInMain();
+        copyEntities();
+    }
+
+    /**
+     * Translates a coordinate that is inside the template to a location that is inside the main dungeon.
+     *
+     * This function silently fails when passed coordinates outside of the template
+     * @param insideTemplate The coordinate that is inside the template
+     * @return The cooresponding coordinate that is inside the main dungeon
+     */
+    public Location templateLocationToMainDungeon(Location insideTemplate) {
+        Location mainDungeonLoc = insideTemplate.clone();
+        mainDungeonLoc.setX(insideTemplate.getX() + getMaxX() + 1);
+        return mainDungeonLoc;
+    }
+
+    private void killAllEntitiesInMain() {
+        getDungeonWorld().getEntities()
+                .forEach((e) -> {
+                    if (e.getLocation().getX() > 0 && e.getType() != EntityType.PLAYER)
+                        e.remove();
+                });
+    }
+
+    public HashMap<UUID, UUID> clonesToTemplates = new HashMap<>();
+
+    private void copyEntities() {
+        Collection<Entity> templateEntities = getDungeonWorld().getNearbyEntities(new Location(getDungeonWorld(), -1, 0, 0), 0 - getMaxX(), getMaxY(), getMaxZ());
+        for (Entity e : templateEntities) {
+            if (e.getVehicle() != null)
+                continue;
+            if (e.getType() == EntityType.PLAYER)
+                continue;
+            if (e.getType() == EntityType.DROPPED_ITEM)
+                continue;
+
+            Location to = templateLocationToMainDungeon(e.getLocation());
+
+            Entity copy = CopyThing.copyEntity(e, to);
+            if (copy == null)
+                continue;
+            clonesToTemplates.put(copy.getUniqueId(), e.getUniqueId());
+        }
     }
 }

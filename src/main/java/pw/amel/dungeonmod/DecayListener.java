@@ -1,10 +1,16 @@
 package pw.amel.dungeonmod;
 
-import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.vehicle.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import pw.amel.dungeonmod.blockcopy.CopyBlock;
+import pw.amel.dungeonmod.blockcopy.CopyThing;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,19 +19,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import vg.civcraft.mc.citadel.Citadel;
 import vg.civcraft.mc.citadel.ReinforcementManager;
 import vg.civcraft.mc.citadel.reinforcement.Reinforcement;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 class DecayListener implements Listener {
-    DecayListener(Dungeon dungeon, int avgTime, int variance, int blockOffset) {
+    DecayListener(DecayDungeon dungeon, int avgTime, int variance, int blockOffset) {
         this.dungeon = dungeon;
         this.avgTime = avgTime;
         this.variance = variance;
@@ -33,7 +37,7 @@ class DecayListener implements Listener {
 
     }
 
-    private Dungeon dungeon;
+    private DecayDungeon dungeon;
     private int avgTime;
     private int variance;
     private int blockOffset;
@@ -76,7 +80,7 @@ class DecayListener implements Listener {
             if (template.getType() == Material.AIR && dest.getType() == Material.AIR)
                 loud = false;
 
-            CopyBlock.copyBlock(template, dest);
+            CopyThing.copyBlock(template, dest);
             if (loud)
                 dest.getWorld().playEffect(dest.getLocation(), Effect.STEP_SOUND, template.getType(), 10);
 
@@ -282,5 +286,303 @@ class DecayListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onEntityBlockChange(EntityChangeBlockEvent event) {
         handleBlockPlace(event.getBlock());
+    }
+
+    private HashSet<UUID> entityLock = new HashSet<>();
+
+    public void entityPlace(Entity placed) {
+        UUID placedUUID = placed.getUniqueId();
+
+        if (placed.getLocation().getWorld() != dungeon.dungeonWorld)
+            return;
+        if (placed.getLocation().getX() < 0)
+            return;
+        if (entityLock.contains(placedUUID)) {
+            return;
+        }
+        entityLock.add(placedUUID);
+
+        boolean kill = placed instanceof Damageable && !(placed instanceof Wither) && !(placed instanceof ArmorStand);
+        // If the wither is killed before its invuln period is over, it won't be killed.
+        // We also don't want to no-effort drop the nether star.
+        // Not that most this matters, since this is a civserver and withers are usually disabled.
+
+        // Armor stands are damagable but can't be killed.
+
+        ItemStack drop = null;
+        if (placed instanceof Boat) {
+            drop = new ItemStack(Material.BOAT, 1);
+        } else if (placed instanceof ArmorStand) {
+            drop = new ItemStack(Material.ARMOR_STAND, 1);
+        } else if (placed instanceof Painting) {
+            drop = new ItemStack(Material.PAINTING, 1);
+        }
+        final ItemStack finalDrop = drop; // has to be final to use in a lambda.
+
+        int semiDelay = ThreadLocalRandom.current().nextInt(-variance, variance);
+        int delay = semiDelay + avgTime;
+
+        DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
+            Entity placedNow = getEntityWithUUID(placedUUID);
+            if (placedNow == null)
+                return;
+
+            if (kill) {
+                ((Damageable) placedNow).damage(Integer.MAX_VALUE);
+            } else {
+                placedNow.remove();
+            }
+            if (finalDrop != null)
+                dungeon.getDungeonWorld().dropItemNaturally(placedNow.getLocation(), finalDrop);
+            entityLock.remove(placedUUID);
+        }, delay);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntitySpawn(CreatureSpawnEvent event) {
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM)
+            return;
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.DEFAULT)
+            return;
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER)
+            return;
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.NATURAL)
+            return;
+
+        entityPlace(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntitySpawn(EntitySpawnEvent event) {
+        if ( event.getEntityType() != EntityType.ENDER_CRYSTAL &&
+                event.getEntityType() != EntityType.ARMOR_STAND)
+            return;
+
+        entityPlace(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVehicleCreate(VehicleCreateEvent event) {
+        if (!CopyThing.isCopyingEntity())
+            entityPlace(event.getVehicle());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onHangingPlace(HangingPlaceEvent event) {
+        entityPlace(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEndCrystal(PlayerInteractEvent event) {
+        // Hack because there's just plain no event from placing a end crystal.
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getMaterial() == Material.END_CRYSTAL) {
+                DungeonMod.getPlugin().getServer().getScheduler().runTask(DungeonMod.getPlugin(), () -> {
+                    List<Entity> entities = event.getPlayer().getNearbyEntities(4, 4, 4);
+                    for (Entity entity : entities) {
+                        if (entity.getType() == EntityType.ENDER_CRYSTAL) {
+                            EnderCrystal crystal = (EnderCrystal) entity;
+                            Block belowCrystal = crystal.getLocation().getBlock().getRelative(BlockFace.DOWN);
+
+                            if (event.getClickedBlock().equals(belowCrystal)) {
+                                entityPlace(crystal);
+                                break;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onSlimeSplit(SlimeSplitEvent event) {
+        entityPlace(event.getEntity());
+    }
+
+    /**
+     * Prevents a recursive infinite loop when a vehicle has passengers.
+     */
+    private HashSet<UUID> vehicularLock = new HashSet<>();
+
+    private Entity getEntityWithUUID(UUID uuid) {
+        List<Entity> results = dungeon.getDungeonWorld().getEntities().stream()
+                .filter((e) -> e.getUniqueId().equals(uuid))
+                .collect(Collectors.toList());
+        assert results.size() == 1 || results.size() == 0;
+        if (results.isEmpty())
+            return null;
+        else
+            return results.get(0);
+    }
+
+    public void entityBreak(Entity broken) {
+        UUID brokenUUID = broken.getUniqueId();
+
+        if (broken.getLocation().getWorld() != dungeon.dungeonWorld)
+            return;
+        if (broken.getLocation().getX() < 0)
+            return;
+        if (entityLock.contains(brokenUUID))
+            return;
+
+        if (!vehicularLock.contains(brokenUUID)) {
+            vehicularLock.add(brokenUUID);
+            if (broken.getVehicle() != null)
+                entityBreak(broken.getVehicle());
+            if (!broken.getPassengers().isEmpty())
+                broken.getPassengers().forEach(this::entityBreak);
+            vehicularLock.remove(brokenUUID);
+        }
+
+        if (!dungeon.clonesToTemplates.containsKey(brokenUUID))
+            return;
+
+        entityLock.add(brokenUUID);
+
+        int semiDelay = ThreadLocalRandom.current().nextInt(-variance, variance);
+        int delay = semiDelay + avgTime;
+
+        DungeonMod.getPlugin().getServer().getScheduler().runTaskLater(DungeonMod.getPlugin(), () -> {
+            Entity template = getEntityWithUUID(dungeon.clonesToTemplates.get(brokenUUID));
+            if (template == null) {
+                entityLock.remove(brokenUUID);
+                dungeon.clonesToTemplates.remove(brokenUUID);
+                return;
+            }
+
+            Entity newClone = CopyThing.copyEntity(template, dungeon.templateLocationToMainDungeon(template.getLocation()));
+            if (newClone == null) {
+                entityLock.remove(brokenUUID);
+                dungeon.clonesToTemplates.remove(brokenUUID);
+                return;
+            }
+
+            Entity brokenNow = getEntityWithUUID(brokenUUID);
+            if (brokenNow != null)
+                brokenNow.remove();
+
+            entityLock.remove(brokenUUID);
+            dungeon.clonesToTemplates.remove(brokenUUID);
+            dungeon.clonesToTemplates.put(newClone.getUniqueId(), template.getUniqueId());
+        }, delay);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onCreeperPower(CreeperPowerEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityCombust(EntityCombustEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityDamage(EntityDamageEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityDeath(EntityDeathEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityExplode(EntityExplodeEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityPickupItem(EntityPickupItemEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityRegainHealth(EntityRegainHealthEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityResurrect(EntityResurrectEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityTame(EntityTameEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityTeleport(EntityTeleportEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onEntityUnleash(EntityUnleashEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onPigZap(PigZapEvent event) {
+        entityBreak(event.getEntity());
+        entityPlace(event.getPigZombie());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onPlayerLeashEntity(PlayerLeashEntityEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onSheepDyeWool(SheepDyeWoolEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onSheepRegrowWool(SheepRegrowWoolEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVillagerAcquireTrade(VillagerAcquireTradeEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVillagerReplenishTrade(VillagerReplenishTradeEvent event) {
+        entityBreak(event.getEntity());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        entityBreak(event.getRightClicked());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVehicleDamage(VehicleDamageEvent event) {
+        entityBreak(event.getVehicle());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVehicleDestroy(VehicleDestroyEvent event) {
+        entityBreak(event.getVehicle());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVehicleEnter(VehicleEnterEvent event) {
+        entityBreak(event.getVehicle());
+        entityBreak(event.getEntered());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onVehicleExit(VehicleExitEvent event) {
+        entityBreak(event.getVehicle());
+        entityBreak(event.getExited());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    private void onHangingBreak(HangingBreakEvent event) {
+        entityBreak(event.getEntity());
     }
 }
