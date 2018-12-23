@@ -1,6 +1,7 @@
 package pw.amel.dungeonmod;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -51,16 +52,21 @@ public class ConfigManager {
 
             boolean generateBedrockBox = dungeonConfig.getBoolean("generateBedrockBox", true);
 
+            String worldType = dungeonsSection.getString(dungeon + ".worldType", "NORMAL");
+            World.Environment environment = World.Environment.valueOf(worldType);
+
             Location dungeonExit = new Location(DungeonMod.getPlugin().getServer().getWorld(exitWorld), exitX, exitY, exitZ);
 
             if (type.equals("PersistentDungeon")) {
-                dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon, generateBedrockBox, maxX, maxY, maxZ));
+                dungeons.put(dungeon, new PersistentDungeon(dungeonSpawn, dungeonExit, dungeon,
+                        generateBedrockBox, environment,
+                        maxX, maxY, maxZ));
             } else if (type.equals("DecayDungeon")) {
                 int variance = dungeonConfig.getInt("breakTimeVarianceSeconds", 10);
                 int avgTime = dungeonConfig.getInt("breakAvgTimeSeconds", 10);
 
                 dungeons.put(dungeon, new DecayDungeon(dungeonSpawn, dungeonExit, dungeon,
-                        generateBedrockBox,variance * 20, avgTime * 20, maxX, maxY, maxZ));
+                        generateBedrockBox,environment,variance * 20, avgTime * 20, maxX, maxY, maxZ));
             }
         });
     }

@@ -2,6 +2,7 @@ package pw.amel.dungeonmod;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -17,10 +18,10 @@ import java.util.logging.Level;
 
 public class DecayDungeon extends Dungeon {
     public DecayDungeon(Location spawnLocation, Location exitLocation,
-                        String name, boolean generateBedrockBox,
+                        String name, boolean generateBedrockBox, World.Environment environment,
                         int avgTime, int variance,
                         int maxX, int maxY, int maxZ) {
-        super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
+        super(spawnLocation, exitLocation, name, environment, maxX, maxY, maxZ);
 
         Plugin maybeCitadel = DungeonMod.getPlugin().getServer().getPluginManager().getPlugin("Citadel");
         boolean citadelInstalled = maybeCitadel != null;

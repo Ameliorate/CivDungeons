@@ -26,6 +26,7 @@ dungeons:
     maxZ: 9
     exitWorld: world_the_end
     generateBedrockBox: false
+    worldType: THE_END # Could also be NORMAL or NETHER.
 
 portals:
   testdungeon1:

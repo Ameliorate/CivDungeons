@@ -2,6 +2,7 @@ package pw.amel.dungeonmod;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 
 import java.util.logging.Level;
 
@@ -10,8 +11,9 @@ import java.util.logging.Level;
  */
 public class PersistentDungeon extends Dungeon {
     public PersistentDungeon(Location spawnLocation, Location exitLocation, String name, boolean generateBedrockBox,
+                             World.Environment environment,
                              int maxX, int maxY, int maxZ) {
-        super(spawnLocation, exitLocation, name, maxX, maxY, maxZ);
+        super(spawnLocation, exitLocation, name, environment, maxX, maxY, maxZ);
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
             if (generateBedrockBox) {
