@@ -99,52 +99,52 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerBlockBreak(BlockBreakEvent event) {
+    private void onPlayerBlockBreak(BlockBreakEvent event) {
         handleBlockBreak(event.getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onExplosionBlockBreak(BlockExplodeEvent event) {
+    private void onExplosionBlockBreak(BlockExplodeEvent event) {
         event.blockList().forEach(this::handleBreakSilent);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onExplosionBlockBreak(EntityExplodeEvent event) {
+    private void onExplosionBlockBreak(EntityExplodeEvent event) {
         event.blockList().forEach(this::handleBreakSilent);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onBlockBurn(BlockBurnEvent event) {
+    private void onBlockBurn(BlockBurnEvent event) {
         handleBlockBreak(event.getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onBlockFade(BlockFadeEvent event) {
+    private void onBlockFade(BlockFadeEvent event) {
         handleBlockBreak(event.getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onCauldronLevelChange(CauldronLevelChangeEvent event) {
+    private void onCauldronLevelChange(CauldronLevelChangeEvent event) {
         handleBlockBreak(event.getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onLeavesDecay(LeavesDecayEvent event) {
+    private void onLeavesDecay(LeavesDecayEvent event) {
         handleBlockBreak(event.getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onBlockDispense(BlockDispenseEvent event) {
+    private void onBlockDispense(BlockDispenseEvent event) {
         handleBlockBreak(event.getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onInventoryMoveItem(InventoryMoveItemEvent event) {
+    private void onInventoryMoveItem(InventoryMoveItemEvent event) {
         handleBlockBreak(event.getSource().getLocation().getBlock(), false);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onInventoryOpen(InventoryOpenEvent event) {
+    private void onInventoryOpen(InventoryOpenEvent event) {
         if (event.getInventory() == null) {
             return;
         } else if (event.getInventory().getName().equals("container.inventory")) {
@@ -157,7 +157,7 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    private void onPlayerInteract(PlayerInteractEvent event) {
         DungeonMod.getPlugin().getServer().getScheduler().runTask(DungeonMod.getPlugin(),
                 () -> handleBlockBreak(event.getClickedBlock(), true));
         // This is done a tick later because placing a block will trigger this event before running the BlockPlaceEvent,
@@ -165,7 +165,7 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent event) {
+    private void onInventoryClick(InventoryClickEvent event) {
         if (event.getInventory() == null) {
             return;
         } else if (event.getInventory().getName().equals("container.inventory")) {
@@ -178,7 +178,7 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onInventoryClose(InventoryCloseEvent event) {
+    private void onInventoryClose(InventoryCloseEvent event) {
         if (event.getInventory() == null) {
             return;
         } else if (event.getInventory().getName().equals("container.inventory")) {
@@ -191,7 +191,7 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onInventoryDrag(InventoryDragEvent event) {
+    private void onInventoryDrag(InventoryDragEvent event) {
         if (event.getInventory() == null) {
             return;
         } else if (event.getInventory().getName().equals("container.inventory")) {
@@ -204,7 +204,7 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onRedstone(BlockRedstoneEvent event) {
+    private void onRedstone(BlockRedstoneEvent event) {
         ArrayList<Block> blocks = new ArrayList<>();
         Block blk = event.getBlock();
 
@@ -271,12 +271,12 @@ class DecayListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onBlockPlace(BlockPlaceEvent event) {
+    private void onBlockPlace(BlockPlaceEvent event) {
         handleBlockPlace(event.getBlock());
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onBucketPlace(PlayerBucketEmptyEvent event) {
+    private void onBucketPlace(PlayerBucketEmptyEvent event) {
         Location clicked = event.getBlockClicked().getLocation();
         BlockFace face = event.getBlockFace();
         Location block = clicked.add(face.getModX(), face.getModY(), face.getModZ());
