@@ -15,6 +15,7 @@ public abstract class Dungeon {
         this.maxX = maxX;
         this.maxY = maxY;
         this.maxZ = maxZ;
+        this.environment = environment;
 
         WorldCreator worldCreator = new WorldCreator("dungeon_" + name);
         worldCreator.generator(new VoidGenerator());
@@ -37,6 +38,7 @@ public abstract class Dungeon {
     private int maxX;
     private int maxY;
     private int maxZ;
+    private World.Environment environment;
 
     public int getMaxX() {
         return maxX;
@@ -72,5 +74,9 @@ public abstract class Dungeon {
 
     public void teleportPlayerToTemplate(Player player) {
         teleportPlayerToSpawn(player);
+    }
+
+    public World.Environment getEnvironment() {
+        return environment;
     }
 }

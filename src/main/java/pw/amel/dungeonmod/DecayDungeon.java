@@ -32,6 +32,7 @@ public class DecayDungeon extends Dungeon {
 
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building dungeon " + name);
         if (dungeonWorld.getBlockAt(-50, 50, -50).getType() == Material.AIR) {
+            undoBadSkyColorStuff();
             if (generateBedrockBox) {
                 DungeonMod.getPlugin().getLogger().log(Level.INFO, "Building bedrock box");
                 // Start building a box around the dungeon template area.
@@ -64,6 +65,38 @@ public class DecayDungeon extends Dungeon {
         }
         rebuild();
         DungeonMod.getPlugin().getLogger().log(Level.INFO, "Finished building dungeon " + name);
+    }
+
+    private void undoBadSkyColorStuff() {
+        if (getEnvironment() == World.Environment.THE_END) {
+            // Delete end exit portal
+            for (int y = 0; y <= 255; y++) {
+                for (int x = -10; x <= 10; x++) {
+                    for (int z = -10; z <= 10; z++) {
+                        getDungeonWorld().getBlockAt(x, y, z).setType(Material.AIR);
+                    }
+                }
+            }
+
+            // Delete end gateway portal
+            for (int y = 70; y <= 80; y++) {
+                for (int x = -200; x <= 200; x++) {
+                    for (int z = -200; z <= 200; z++) {
+                        getDungeonWorld().getBlockAt(x, y, z).setType(Material.AIR);
+                    }
+                }
+            }
+
+            // Kill end dragon
+            getDungeonWorld().getEntities().forEach((e) -> {
+                if (e.getType() == EntityType.ENDER_DRAGON) {
+                    e.remove();
+                }
+            });
+
+            // Place an end portal block to prevent new dragons from spawning
+            getDungeonWorld().getBlockAt(0, 1, -2).setType(Material.ENDER_PORTAL, false);
+        }
     }
 
     @Override
